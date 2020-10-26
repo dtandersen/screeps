@@ -13,7 +13,7 @@
 /build/*
 
 # TypeScript definitions installed by Typings
-/typings
+#/typings
 
 # Screeps Config
 screeps.json
