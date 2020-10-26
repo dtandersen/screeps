@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "CommonJs"
+    "module": "CommonJs",
+    "typeRoots" : ["./node_modules/@types", "./typings"]
   }
 }

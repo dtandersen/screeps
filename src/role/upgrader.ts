@@ -1,3 +1,5 @@
+import { Role } from "./role";
+
 export class Upgrader implements Role {
   execute(creep: Creep): void {
     console.log(`upgrader ${creep.name}`);

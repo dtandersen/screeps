@@ -1,3 +1,5 @@
+import { Role } from "./role";
+
 export class Harvester implements Role {
   execute(creep: Creep): void {
     console.log(`harvest ${creep.name}`);

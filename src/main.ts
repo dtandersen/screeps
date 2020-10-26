@@ -20,7 +20,8 @@ function role(role: string): Creep[] {
   let results: Creep[] = [];
 
   for (const name in Memory.creeps) {
-    let r = Memory.creeps[name].role;
+    let mem: CreepMemory = Memory.creeps[name];
+    let r = mem["role"];
     if (r === role) {
       results.push(Game.creeps[name]);
     }
