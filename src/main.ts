@@ -1,19 +1,20 @@
 import { ErrorMapper } from "utils/ErrorMapper";
 import { Harvester } from "role/harvest";
 import { Upgrader } from "role/upgrader";
+import { MockRoleManager, RoleManager } from "rolemanager";
+import { RandomIdGenerator, ScreepsScreepsWorld, SequentialIdGenerator } from "screeps";
+import { CreepSpawner } from "spawner";
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
   console.log(`Current game tick is ${Game.time}`);
 
-  // Automatically delete memory of missing creeps
+  let screeps = new ScreepsScreepsWorld()
   cleanMemory();
-  spawnCreeps(role("harvester"), role("upgrader"));
-  // digEnergy();
+  spawnCreeps2();
   applyRole(new Harvester(), "harvester");
   applyRole(new Upgrader(), "upgrader");
-  //.filter((item: Creep) => item.memory.role === "harvester");
 });
 
 function role(role: string): Creep[] {
@@ -40,6 +41,7 @@ function applyRole(role: Harvester, roleName: string) {
   }
 }
 
+// Automatically delete memory of missing creeps
 function cleanMemory() {
   for (const name in Memory.creeps) {
     if (!(name in Game.creeps)) {
@@ -48,35 +50,11 @@ function cleanMemory() {
   }
 }
 
-function spawnCreeps(harvesters: Creep[], upgraders: Creep[]) {
-  spawnCreep(harvesters, "harvester", 1);
-  spawnCreep(upgraders, "upgrader", 2);
-}
+// module main {
+function spawnCreeps2() {
+  let screeps = new ScreepsScreepsWorld();
+  let roleManager = new MockRoleManager();
+  let spawner = new CreepSpawner(roleManager, screeps, new RandomIdGenerator());
 
-function spawnCreep(harvesters: Creep[], roleName: string, max: number) {
-  let creepCount = harvesters.length;
-  console.log(`${roleName} => ${creepCount}`);
-  if (creepCount < max) {
-    console.log(`spawning ${roleName}`);
-    let rn = roleName + "-" + Math.floor(Math.random() * 10000);
-    var r = Game.spawns["Spawn1"].spawnCreep([WORK, CARRY, MOVE], rn, {
-      memory: { role: roleName, working: true, room: Game.spawns["Spawn1"].room.name },
-      dryRun: false
-    });
-  }
+  spawner.spawn();
 }
-// function digEnergy() {
-//   for (var name in Game.creeps) {
-//     var creep = Game.creeps[name];
-//     if (creep.store.getFreeCapacity() > 0) {
-//       var sources = creep.room.find(FIND_SOURCES);
-//       if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-//         creep.moveTo(sources[0]);
-//       }
-//     } else {
-//       if (creep.transfer(Game.spawns["Spawn1"], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-//         creep.moveTo(Game.spawns["Spawn1"]);
-//       }
-//     }
-//   }
-// }

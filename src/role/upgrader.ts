@@ -16,13 +16,13 @@ export class Upgrader implements Role {
       let source = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE)!;
       if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
         creep.moveTo(source, { visualizePathStyle: { stroke: "#ffaa00" } });
-        creep.say("☀");
       }
+      creep.say("🪓");
     } else if (!creep.memory.working) {
       if (creep.upgradeController(creep.room.controller!) == ERR_NOT_IN_RANGE) {
         creep.moveTo(creep.room.controller!);
-        creep.say("🙌");
       }
+      creep.say("⚙️");
     }
   }
 }
