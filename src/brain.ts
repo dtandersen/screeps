@@ -2,7 +2,11 @@ import { MinerJob } from "role/job.miner";
 import { Job, JobManager } from "role/jobmanager";
 import { ScreepsWorld } from "screeps";
 
-export class Brain {
+interface Command {
+    run(): void;
+}
+
+export class MiningAdviser implements Command {
     world: ScreepsWorld;
     jobManager: JobManager;
 

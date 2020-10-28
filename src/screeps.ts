@@ -97,7 +97,10 @@ export class MockScreepsWorld implements ScreepsWorld {
 
 export class ScreepsScreepsWorld implements ScreepsWorld {
     sources(): { [name: string]: any; } {
-        throw new Error("Method not implemented.");
+        let spawn = Game.spawns['Spawn1'];
+        let room = spawn.room;
+        let sources = room.find(FIND_SOURCES);
+        return sources;
     }
     limit(key: string, value?: number): number {
         if (value === undefined) {

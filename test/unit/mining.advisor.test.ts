@@ -5,12 +5,12 @@ import { Game, Memory, SS } from "./mock"
 import { MockRoleManager, RoleManager } from "rolemanager";
 import { CreepSpawner } from "spawner";
 import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator } from "screeps";
-import { Brain } from "brain";
+import { MiningAdviser } from "brain";
 import { InMemoryJobManager, Job, JobManager } from "role/jobmanager";
 import { MinerJob } from "role/job.miner";
 
 describe("mining advistor", () => {
-  var brain: Brain;
+  var brain: MiningAdviser;
   var world: MockScreepsWorld;
   var jobManager: JobManager;
 
@@ -20,7 +20,7 @@ describe("mining advistor", () => {
   beforeEach(() => {
     world = new MockScreepsWorld();
     jobManager = new InMemoryJobManager();
-    brain = new Brain(world, jobManager);
+    brain = new MiningAdviser(world, jobManager);
   });
 
   it("create miner job", () => {

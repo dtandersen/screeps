@@ -4,12 +4,21 @@ import { Upgrader } from "role/upgrader";
 import { MockRoleManager, RoleManager } from "rolemanager";
 import { RandomIdGenerator, ScreepsScreepsWorld, SequentialIdGenerator } from "screeps";
 import { CreepSpawner } from "spawner";
+import { MiningAdviser } from "brain";
+import { CommandFactory } from "command";
+import { InMemoryJobManager, ScreepsJobManager } from "role/jobmanager";
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
   console.log(`Current game tick is ${Game.time}`);
-
+  let jobManager = new ScreepsJobManager();
+  let factory = new CommandFactory({
+    world: new ScreepsScreepsWorld(),
+    jobManager: jobManager
+  });
+  let adviser = factory.miningAdviser();
+  adviser.run();
   let screeps = new ScreepsScreepsWorld()
   cleanMemory();
   spawnCreeps2();
