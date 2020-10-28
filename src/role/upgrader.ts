@@ -18,8 +18,8 @@ export class Upgrader extends Role {
     }
 
     if (creep.memory.working) {
-      let source = creep.pos.findClosestByRange(FIND_SOURCES_ACTIVE)!;
-      if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+      let source = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES)!;
+      if (creep.pickup(source) == ERR_NOT_IN_RANGE) {
         creep.moveTo(source, { visualizePathStyle: { stroke: "#ffaa00" } });
       }
       creep.say("🪓");

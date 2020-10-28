@@ -26,7 +26,7 @@ export class CreepSpawner {
                 working: true,
                 room: spawn.room
             })
-        } else if (upgraders < 4) {
+        } else if (upgraders < 10) {
             this.screepsWorld.spawn('upgrader-' + this.idGenerator.next_id(), {
                 role: 'upgrader',
                 working: true,
