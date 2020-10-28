@@ -1,6 +1,8 @@
 import { CreepEntity, MockCreepEntity, ScreepsCreepEntity } from "entity/creep";
+import { MockSourceEntity, ScreepsSourceEntity, SourceEntity } from "entity/source";
+import { MockSpawnEntity, ScreepsSpawnEntity, SpawnEntity } from "entity/spawn";
 import { EntityNotFound } from "exception";
-import { get_memory, set_memory } from "memory";
+import { get_creep_memory, get_memory, set_memory } from "memory";
 import { CreepSpawner } from "spawner";
 
 export interface IdGenerator {
@@ -23,11 +25,12 @@ export class SequentialIdGenerator implements IdGenerator {
 
 export interface ScreepsWorld {
     creeps_with_role(name: string): CreepEntity[];
-    sources(): { [name: string]: any };
+    sources(): { [name: string]: SourceEntity };
     limit(key: string, value: number): void;
     limit(key: string): number;
 
-    spawn(name: string, roleName: string): number;
+    spawn(name: string, memory: { [name: string]: any }): number;
+    findSpawn(name: string): SpawnEntity;
 
     count_role(role: string): number;
 }
@@ -37,9 +40,9 @@ export class MockScreepsWorld implements ScreepsWorld {
 
     limits: { [key: string]: number } = {}
 
-    spawns: { [key: string]: any } = {};
+    spawns: { [key: string]: SpawnEntity } = {};
 
-    _sources: { [name: string]: any } = {};
+    _sources: { [name: string]: SourceEntity } = {};
 
     spawned: any = [];
 
@@ -64,15 +67,18 @@ export class MockScreepsWorld implements ScreepsWorld {
         return 0;
     }
 
-    add_source(sourceId: string, x?: number, y?: number) {
-        this._sources[sourceId] = { x: x, y: y };
+    add_source(sourceId: string, x: number, y: number) {
+        this._sources[sourceId] = new MockSourceEntity(x, y);
     }
 
-    add_spawn(name: string, energy: number) {
-        this.spawns[name] = {
-            name: name,
-            energy: energy
-        };
+    add_spawn(name: string, energy: number, room: string, x: number, y: number) {
+        this.spawns[name] = new MockSpawnEntity(
+            name,
+            energy,
+            room,
+            x,
+            y
+        );
     }
 
     findCreep(name: string): CreepEntity {
@@ -99,14 +105,19 @@ export class MockScreepsWorld implements ScreepsWorld {
         return results; //.map(creepEntity => creepEntity.creep);
     }
 
-    sources(): { [name: string]: any; } {
+    findSpawn(name: string) {
+        return this.spawns[name];
+    }
+
+    sources(): { [name: string]: SourceEntity; } {
         return this._sources;
     }
 
-    spawn(xname: string, roleName: string): number {
+    spawn(xname: string, memory: { [name: string]: any }): number {
         this.spawned.push({
             name: xname,
-            role: roleName
+            role: memory['role'],
+            memory: memory
         });
 
         return 0;
@@ -127,13 +138,15 @@ export class MockScreepsWorld implements ScreepsWorld {
 }
 
 export class ScreepsScreepsWorld implements ScreepsWorld {
-    creeps_with_role(name: string): CreepEntity[] {
+    creeps_with_role(roleName: string): CreepEntity[] {
         let results: CreepEntity[] = [];
 
         for (const name in Memory.creeps) {
-            let mem: CreepMemory = Memory.creeps[name];
-            let r = mem["role"];
-            if (r === name) {
+            // let mem: CreepMemory = Memory.creeps[name];
+            // let r = mem["role"];
+            let r = get_creep_memory(Game.creeps[name], 'role');
+            // console.log(`${roleName} ${name}==${r}?`);
+            if (r == roleName) {
                 let entity = new ScreepsCreepEntity(name, Game.creeps[name]);
                 results.push(entity);
             }
@@ -142,12 +155,21 @@ export class ScreepsScreepsWorld implements ScreepsWorld {
         return results;
     }
 
-    sources(): { [name: string]: any; } {
+    sources(): { [name: string]: SourceEntity; } {
         let spawn = Game.spawns['Spawn1'];
         let room = spawn.room;
-        let sources = room.find(FIND_SOURCES);
-        return sources;
+        let sources: Source[] = <Source[]>room.find(FIND_SOURCES);
+
+        let results: { [name: string]: SourceEntity } = {};
+
+        for (let source of sources) {
+            // console.log(`sources ${source.id}`);
+            results[source.id] = new ScreepsSourceEntity(source);
+        }
+
+        return results;
     }
+
     limit(key: string, value?: number): number {
         if (value === undefined) {
             return get_memory(key);
@@ -158,13 +180,23 @@ export class ScreepsScreepsWorld implements ScreepsWorld {
         return value;
     };
 
-    spawn(name: string, roleName: string): number {
-        console.log(`spawning ${name} ${roleName}`);
+    spawn(name: string, memory: { [name: string]: any }): number {
+        console.log(`spawning ${name} ${memory['role']}`);
 
+        memory['role'] = memory['role'];
+        memory['working'] = true;
+        memory['room'] = Game.spawns["Spawn1"].room.name;
+
+        let creepMemory = <CreepMemory>memory;
         return Game.spawns["Spawn1"].spawnCreep([WORK, CARRY, MOVE], name, {
-            memory: { role: roleName, working: true, room: Game.spawns["Spawn1"].room.name },
+            memory: creepMemory,
             dryRun: false
         });
+    }
+
+    findSpawn(name: string): SpawnEntity {
+        let spawn = Game.spawns[name];
+        return new ScreepsSpawnEntity(spawn);
     }
 
     count_role(role: string): number {

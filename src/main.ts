@@ -12,6 +12,7 @@ import { MiningJobHandler } from "job/job.miner";
 import { RoleRunner } from "role/runner";
 import { ScreepRoleContext } from "role/role";
 import { CreepEntity, ScreepsCreepEntity } from "entity/creep";
+import { Miner } from "role/miner";
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
@@ -34,35 +35,14 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
   spawnCreeps();
 
-  applyRole(new Harvester(), "harvester");
-  applyRole(new Upgrader(), "upgrader");
   let roleManager = new InMemoryRoleManager();
+  roleManager.add_role(new Harvester());
+  roleManager.add_role(new Upgrader());
+  roleManager.add_role(new Miner());
+
   let roleRunner = new RoleRunner(world, roleManager);
   roleRunner.run();
 });
-
-function role(role: string): Creep[] {
-  let results: Creep[] = [];
-
-  for (const name in Memory.creeps) {
-    let mem: CreepMemory = Memory.creeps[name];
-    let r = mem["role"];
-    if (r === role) {
-      results.push(Game.creeps[name]);
-    }
-  }
-
-  return results;
-}
-
-function applyRole(role: Harvester, roleName: string) {
-  for (const name in Memory.creeps) {
-    let r = Memory.creeps[name].role;
-    if (r === roleName) {
-      role.execute(new ScreepRoleContext(Game.creeps[name], new ScreepsCreepEntity(name, Game.creeps[name])));
-    }
-  }
-}
 
 // Automatically delete memory of missing creeps
 function cleanMemory() {

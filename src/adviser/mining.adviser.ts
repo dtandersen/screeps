@@ -14,8 +14,8 @@ export class MiningAdviser implements Command {
 
     run() {
         for (let name in this.world.sources()) {
-            // console.log('source=' + name);
-            let job = new MiningJob('mining-job-' + name, 'miner-' + name);
+            let source = this.world.sources()[name];
+            let job = new MiningJob('mining-job-' + name, 'miner-' + name, source.x, source.y);
             job.type = "MINE";
             job.source_id = name;
 

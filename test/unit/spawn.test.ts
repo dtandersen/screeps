@@ -20,7 +20,7 @@ describe("spawn test", () => {
     screeps.add_creep("u1", 'upgrader');
     screeps.add_creep("u2", 'upgrader');
     screeps.add_creep("u3", 'upgrader');
-    screeps.add_spawn('Spawn1', 299);
+    screeps.add_spawn('Spawn1', 299, 'r1', 7, 7);
     let roleManager = new InMemoryRoleManager();
     let spawner = new CreepSpawner(roleManager, screeps, new SequentialIdGenerator);
 
@@ -30,7 +30,41 @@ describe("spawn test", () => {
     assert.equal(screeps.limit('upgrader'), 4);
     assert.deepInclude(screeps.spawned, {
       name: 'harvester-1',
-      role: 'harvester'
+      role: 'harvester',
+      memory: {
+        role: 'harvester',
+        working: true,
+        room: 'r1'
+      }
+    });
+  });
+
+  it("should spawn upgrader when energy below 300", () => {
+    let screeps = new MockScreepsWorld();
+    screeps.add_creep("h2", 'harvester');
+    screeps.add_creep("u1", 'upgrader');
+    screeps.add_creep("u2", 'upgrader');
+    screeps.add_creep("u3", 'upgrader');
+    screeps.add_creep("u4", 'upgrader');
+    screeps.add_creep("u5", 'upgrader');
+    screeps.add_creep("u6", 'upgrader');
+    screeps.add_creep("u7", 'upgrader');
+    screeps.add_creep("u8", 'upgrader');
+    screeps.add_creep("u9", 'upgrader');
+    screeps.add_spawn('Spawn1', 299, 'room2', 8, 8);
+    let roleManager = new InMemoryRoleManager();
+    let spawner = new CreepSpawner(roleManager, screeps, new SequentialIdGenerator);
+
+    spawner.spawn();
+
+    assert.deepInclude(screeps.spawned, {
+      name: 'upgrader-1',
+      role: 'upgrader',
+      memory: {
+        role: 'upgrader',
+        working: true,
+        room: 'room2'
+      }
     });
   });
 

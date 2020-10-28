@@ -13,7 +13,9 @@ export class RoleRunner {
 
     run() {
         for (let role of this.roleManager.roles()) {
+            // console.log(`running ${role.name}`);
             let creeps = this.world.creeps_with_role(role.name);
+            console.log(`${creeps.length} creeps with role ${role.name}`);
             for (let creepEntity of creeps) {
                 role.execute(new ScreepsRoleContext(creepEntity.creep, creepEntity));
             }

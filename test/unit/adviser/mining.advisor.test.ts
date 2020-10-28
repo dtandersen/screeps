@@ -24,29 +24,31 @@ describe("mining adviser", () => {
   });
 
   it("create a mining job for the source", () => {
-    world.add_source("s1");
+    world.add_source("s1", 1, 1);
 
     brain.run();
 
-    let job = new MiningJob('mining-job-s1', 'miner-s1');
+    let job = new MiningJob('mining-job-s1', 'miner-s1', 1, 1);
     job.type = "MINE";
     job.source_id = "s1";
+    // job.x = 1;
+    // job.y = 1;
 
     assert.lengthOf(jobManager.jobs(), 1);
     assert.deepInclude(jobManager.jobs(), job);
   });
 
   it("create a mining job for each source", () => {
-    world.add_source('s2');
-    world.add_source('s3');
+    world.add_source('s2', 2, 2);
+    world.add_source('s3', 3, 3);
 
     brain.run();
 
-    let job = new MiningJob('mining-job-s2', 'miner-s2');
+    let job = new MiningJob('mining-job-s2', 'miner-s2', 2, 2);
     job.type = "MINE";
     job.source_id = "s2";
 
-    let job2 = new MiningJob('mining-job-s3', 'miner-s3');
+    let job2 = new MiningJob('mining-job-s3', 'miner-s3', 3, 3);
     job2.type = "MINE";
     job2.source_id = "s3";
 
@@ -55,9 +57,9 @@ describe("mining adviser", () => {
   });
 
   it("old mining job is saved", () => {
-    world.add_source("s1");
+    world.add_source("s1", 1, 1);
 
-    let job2 = new MiningJob('mining-job-s1', 'miner-1');
+    let job2 = new MiningJob('mining-job-s1', 'miner-1', 1, 1);
     job2.type = "MINE";
     job2.source_id = "s1";
     job2.miner_creep_name = "miner-1";
@@ -65,7 +67,7 @@ describe("mining adviser", () => {
 
     brain.run();
 
-    let job = new MiningJob('mining-job-s1', 'miner-1');
+    let job = new MiningJob('mining-job-s1', 'miner-1', 1, 1);
     job.type = "MINE";
     job.source_id = "s1";
 

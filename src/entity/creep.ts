@@ -1,5 +1,5 @@
+import { MemoryUndefined } from "exception";
 import { get_creep_memory } from "memory";
-import { OperationCanceledException } from "typescript";
 
 export interface CreepEntity {
     readonly name: string;
@@ -35,7 +35,7 @@ export class MockCreepEntity implements CreepEntity {
 
     memory(key: string) {
         if (this._memory == undefined) {
-            throw new OperationCanceledException();
+            throw new MemoryUndefined();
         }
 
         return this._memory[key];

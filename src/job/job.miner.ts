@@ -5,10 +5,14 @@ import { Job, JobManager } from "../role/jobmanager";
 export class MiningJob extends Job {
     /** id of creep that is mining */
     miner_creep_name: string;
+    x: number;
+    y: number;
 
-    constructor(id: string, miner_creep_name: string) {
+    constructor(id: string, miner_creep_name: string, x: number, y: number) {
         super(id);
         this.miner_creep_name = miner_creep_name;
+        this.x = x;
+        this.y = y;
     }
 }
 
@@ -22,6 +26,15 @@ export class MiningJobHandler {
     }
 
     run(job: MiningJob): void {
-        this.world.spawn(job.miner_creep_name, 'miner');
+        let spawn = this.world.findSpawn('Spawn1');
+        let source = this.world.sources()[job.source_id!];
+        console.log('sourceid=' + job.source_id);
+        this.world.spawn(job.miner_creep_name, {
+            role: 'miner',
+            x: source.x,
+            y: source.y,
+            working: true,
+            room: spawn.room
+        });
     }
 }
