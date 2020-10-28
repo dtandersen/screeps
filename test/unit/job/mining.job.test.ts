@@ -46,7 +46,8 @@ describe("mining job", () => {
         x: 1,
         y: 1,
         working: true,
-        room: 'r1'
+        room: 'r1',
+        sourceId: '0'
       }
     });
   });
@@ -73,7 +74,8 @@ describe("mining job", () => {
         x: 2,
         y: 2,
         working: true,
-        room: 'r2'
+        room: 'r2',
+        sourceId: '1'
       }
     });
   });

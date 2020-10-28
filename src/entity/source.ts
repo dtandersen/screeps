@@ -15,10 +15,12 @@ export class MockSourceEntity implements SourceEntity {
 }
 
 export class ScreepsSourceEntity implements SourceEntity {
+    source: Source | Mineral<MineralConstant> | Deposit;
     x: number;
     y: number;
 
     constructor(source: Source) {
+        this.source = source;
         this.x = source.pos.x;
         this.y = source.pos.y;
     }

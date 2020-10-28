@@ -17,9 +17,9 @@ describe("spawn test", () => {
   it("should spawn harvester when energy below 300", () => {
     let screeps = new MockScreepsWorld();
     // screeps.add_creep("h1", 'harvester');
-    screeps.add_creep("u1", 'upgrader');
-    screeps.add_creep("u2", 'upgrader');
-    screeps.add_creep("u3", 'upgrader');
+    screeps.add_creep("u1", { role: 'upgrader' }, 1, 1);
+    screeps.add_creep("u2", { role: 'upgrader' }, 2, 2);
+    screeps.add_creep("u3", { role: 'upgrader' }, 3, 3);
     screeps.add_spawn('Spawn1', 299, 'r1', 7, 7);
     let roleManager = new InMemoryRoleManager();
     let spawner = new CreepSpawner(roleManager, screeps, new SequentialIdGenerator);
@@ -41,10 +41,10 @@ describe("spawn test", () => {
 
   it("should spawn upgrader when energy below 300", () => {
     let screeps = new MockScreepsWorld();
-    screeps.add_creep("h2", 'harvester');
-    screeps.add_creep("u1", 'upgrader');
-    screeps.add_creep("u2", 'upgrader');
-    screeps.add_creep("u3", 'upgrader');
+    screeps.add_creep("h2", { role: 'harvester' }, 4, 4);
+    screeps.add_creep("u1", { role: 'upgrader' }, 1, 1);
+    screeps.add_creep("u2", { role: 'upgrader' }, 2, 2);
+    screeps.add_creep("u3", { role: 'upgrader' }, 3, 3);
     // screeps.add_creep("u4", 'upgrader');
     // screeps.add_creep("u5", 'upgrader');
     // screeps.add_creep("u6", 'upgrader');
@@ -70,17 +70,17 @@ describe("spawn test", () => {
 
   it("should spawn nothing", () => {
     let screeps = new MockScreepsWorld();
-    screeps.add_creep("h2", 'harvester');
-    screeps.add_creep("u1", 'upgrader');
-    screeps.add_creep("u2", 'upgrader');
-    screeps.add_creep("u3", 'upgrader');
-    screeps.add_creep("u4", 'upgrader');
-    screeps.add_creep("u5", 'upgrader');
-    screeps.add_creep("u6", 'upgrader');
-    screeps.add_creep("u7", 'upgrader');
-    screeps.add_creep("u8", 'upgrader');
-    screeps.add_creep("u9", 'upgrader');
-    screeps.add_creep("u10", 'upgrader');
+    screeps.add_creep("h2", { role: 'harvester' }, 4, 4);
+    screeps.add_creep("u1", { role: 'upgrader' }, 4, 4);
+    screeps.add_creep("u2", { role: 'upgrader' }, 4, 4);
+    screeps.add_creep("u3", { role: 'upgrader' }, 4, 4);
+    screeps.add_creep("u4", { role: 'upgrader' }, 4, 4);
+    screeps.add_creep("u5", { role: 'upgrader' }, 4, 4);
+    screeps.add_creep("u6", { role: 'upgrader' }, 4, 4);
+    screeps.add_creep("u7", { role: 'upgrader' }, 4, 4);
+    screeps.add_creep("u8", { role: 'upgrader' }, 4, 4);
+    screeps.add_creep("u9", { role: 'upgrader' }, 4, 4);
+    screeps.add_creep("u10", { role: 'upgrader' }, 4, 4);
     let roleManager = new InMemoryRoleManager();
     let spawner = new CreepSpawner(roleManager, screeps, new SequentialIdGenerator);
 

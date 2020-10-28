@@ -38,7 +38,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
   let roleManager = new InMemoryRoleManager();
   roleManager.add_role(new Harvester());
   roleManager.add_role(new Upgrader());
-  roleManager.add_role(new Miner());
+  roleManager.add_role(new Miner(world));
 
   let roleRunner = new RoleRunner(world, roleManager);
   roleRunner.run();

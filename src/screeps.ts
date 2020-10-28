@@ -1,4 +1,4 @@
-import { CreepEntity, MockCreepEntity, ScreepsCreepEntity } from "entity/creep";
+import { CreepEntity, MockCreepEntity, Position, ScreepsCreepEntity } from "entity/creep";
 import { MockSourceEntity, ScreepsSourceEntity, SourceEntity } from "entity/source";
 import { MockSpawnEntity, ScreepsSpawnEntity, SpawnEntity } from "entity/spawn";
 import { EntityNotFound } from "exception";
@@ -57,12 +57,8 @@ export class MockScreepsWorld implements ScreepsWorld {
         return value;
     };
 
-    add_creep(name: string, roleName: string, memory?: any): number {
-        if (memory == undefined) {
-            this.creeps.push(new MockCreepEntity(name, { memory: { role: roleName } }, { role: roleName }));
-        } else {
-            this.creeps.push(new MockCreepEntity(name, { memory: memory }, memory));
-        }
+    add_creep(name: string, memory: any, x: number, y: number): number {
+        this.creeps.push(new MockCreepEntity(name, { memory: memory }, memory, new Position(x, y)));
 
         return 0;
     }
@@ -89,7 +85,7 @@ export class MockScreepsWorld implements ScreepsWorld {
             }
         }
         console.log(`${name} not found`);
-        throw new EntityNotFound();
+        throw new EntityNotFound(`creep ${name} not found`);
     }
 
     creeps_with_role(name: string): CreepEntity[] {
