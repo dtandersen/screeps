@@ -1,29 +1,42 @@
 import { ErrorMapper } from "utils/ErrorMapper";
 import { Harvester } from "role/harvest";
 import { Upgrader } from "role/upgrader";
-import { MockRoleManager, RoleManager } from "rolemanager";
+import { InMemoryRoleManager, RoleManager } from "role/rolemanager";
 import { RandomIdGenerator, ScreepsScreepsWorld, SequentialIdGenerator } from "screeps";
 import { CreepSpawner } from "spawner";
-import { MiningAdviser } from "brain";
-import { CommandFactory } from "command";
+import { MiningAdviser } from "adviser/mining.adviser";
+import { CommandFactory } from "job/command";
 import { InMemoryJobManager, ScreepsJobManager } from "role/jobmanager";
+import { JobDeployer as JobRunner } from "job/job";
+import { MiningJobHandler } from "job/job.miner";
+import { RoleRunner } from "role/role";
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
-  console.log(`Current game tick is ${Game.time}`);
+  console.log(`=== TICK ${Game.time} ===`);
+
+  cleanMemory();
+
   let jobManager = new ScreepsJobManager();
+  let world = new ScreepsScreepsWorld();
   let factory = new CommandFactory({
-    world: new ScreepsScreepsWorld(),
+    world: world,
     jobManager: jobManager
   });
   let adviser = factory.miningAdviser();
   adviser.run();
-  let screeps = new ScreepsScreepsWorld()
-  cleanMemory();
-  spawnCreeps2();
+
+  let jobRunner = new JobRunner(jobManager, new MiningJobHandler(world, jobManager));
+  jobRunner.run();
+
+  spawnCreeps();
+
   applyRole(new Harvester(), "harvester");
   applyRole(new Upgrader(), "upgrader");
+  let roleManager = new InMemoryRoleManager();
+  let roleRunner = new RoleRunner(world, roleManager);
+  roleRunner.run();
 });
 
 function role(role: string): Creep[] {
@@ -42,7 +55,6 @@ function role(role: string): Creep[] {
 
 function applyRole(role: Harvester, roleName: string) {
   for (const name in Memory.creeps) {
-    // console.log(name);
     let r = Memory.creeps[name].role;
     if (r === roleName) {
       role.execute(Game.creeps[name]);
@@ -60,9 +72,9 @@ function cleanMemory() {
 }
 
 // module main {
-function spawnCreeps2() {
+function spawnCreeps() {
   let screeps = new ScreepsScreepsWorld();
-  let roleManager = new MockRoleManager();
+  let roleManager = new InMemoryRoleManager();
   let spawner = new CreepSpawner(roleManager, screeps, new RandomIdGenerator());
 
   spawner.spawn();

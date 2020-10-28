@@ -20,6 +20,7 @@ export class SequentialIdGenerator implements IdGenerator {
 }
 
 export interface ScreepsWorld {
+    creeps_with_role(name: string): Creep[];
     sources(): { [name: string]: any };
     limit(key: string, value: number): void;
     limit(key: string): number;
@@ -68,6 +69,19 @@ export class MockScreepsWorld implements ScreepsWorld {
         };
     }
 
+    creeps_with_role(name: string): Creep[] {
+        let results = [];
+
+        for (let creep of this.creeps) {
+            let r = creep.role;
+            if (r === name) {
+                results.push(creep);
+            }
+        }
+
+        return results;
+    }
+
     sources(): { [name: string]: any; } {
         return this._sources;
     }
@@ -96,6 +110,20 @@ export class MockScreepsWorld implements ScreepsWorld {
 }
 
 export class ScreepsScreepsWorld implements ScreepsWorld {
+    creeps_with_role(name: string): Creep[] {
+        let results: Creep[] = [];
+
+        for (const name in Memory.creeps) {
+            let mem: CreepMemory = Memory.creeps[name];
+            let r = mem["role"];
+            if (r === name) {
+                results.push(Game.creeps[name]);
+            }
+        }
+
+        return results;
+    }
+
     sources(): { [name: string]: any; } {
         let spawn = Game.spawns['Spawn1'];
         let room = spawn.room;
@@ -113,6 +141,8 @@ export class ScreepsScreepsWorld implements ScreepsWorld {
     };
 
     spawn(name: string, roleName: string): number {
+        console.log(`spawning ${name} ${roleName}`);
+
         return Game.spawns["Spawn1"].spawnCreep([WORK, CARRY, MOVE], name, {
             memory: { role: roleName, working: true, room: Game.spawns["Spawn1"].room.name },
             dryRun: false

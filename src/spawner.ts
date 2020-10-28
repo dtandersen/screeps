@@ -1,4 +1,4 @@
-import { RoleManager } from "rolemanager";
+import { RoleManager } from "role/rolemanager";
 import { IdGenerator, ScreepsWorld } from "screeps";
 
 export class CreepSpawner {

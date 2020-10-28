@@ -2,11 +2,11 @@ import { assert } from "chai";
 import { mainModule } from "process";
 import { loop } from "../../src/main";
 import { Game, Memory, SS } from "./mock"
-import { MockRoleManager, RoleManager } from "rolemanager";
+import { InMemoryRoleManager, RoleManager } from "role/rolemanager";
 import { CreepSpawner } from "spawner";
 import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator } from "screeps";
 
-describe("xx", () => {
+describe("spawn test", () => {
   before(() => {
     // runs before all test in this block
   });
@@ -21,7 +21,7 @@ describe("xx", () => {
     screeps.add_creep("u2", 'upgrader');
     screeps.add_creep("u3", 'upgrader');
     screeps.add_spawn('Spawn1', 299);
-    let roleManager = new MockRoleManager();
+    let roleManager = new InMemoryRoleManager();
     let spawner = new CreepSpawner(roleManager, screeps, new SequentialIdGenerator);
 
     spawner.spawn();
@@ -47,7 +47,7 @@ describe("xx", () => {
     screeps.add_creep("u8", 'upgrader');
     screeps.add_creep("u9", 'upgrader');
     screeps.add_creep("u10", 'upgrader');
-    let roleManager = new MockRoleManager();
+    let roleManager = new InMemoryRoleManager();
     let spawner = new CreepSpawner(roleManager, screeps, new SequentialIdGenerator);
 
     spawner.spawn();

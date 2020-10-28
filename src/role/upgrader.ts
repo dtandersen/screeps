@@ -1,8 +1,12 @@
 import { Role } from "./role";
 
-export class Upgrader implements Role {
+export class Upgrader extends Role {
+  constructor() {
+    super('upgrader');
+  }
+
   execute(creep: Creep): void {
-    console.log(`upgrader ${creep.name}`);
+    // console.log(`upgrader ${creep.name}`);
     var creepCarry = creep.store.getUsedCapacity(RESOURCE_ENERGY);
     var creepCarryCap = creep.store.getCapacity(RESOURCE_ENERGY);
 

@@ -3,7 +3,7 @@ import { get_memory, set_memory } from "memory";
 export class Job {
     id: string;
     type?: string;
-    target?: string;
+    source_id?: string;
 
     constructor(id: string) {
         this.id = id;
@@ -36,7 +36,7 @@ export class ScreepsJobManager implements JobManager {
     // _jobs: { [name: string]: any } = {};
 
     jobs(): Job[] {
-        return Object.values(this.jobMap);
+        return Object.values(this.jobMap());
     }
 
     add(job: Job): void {
