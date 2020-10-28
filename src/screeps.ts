@@ -20,6 +20,7 @@ export class SequentialIdGenerator implements IdGenerator {
 }
 
 export interface ScreepsWorld {
+    sources(): { [name: string]: any };
     limit(key: string, value: number): void;
     limit(key: string): number;
 
@@ -34,6 +35,8 @@ export class MockScreepsWorld implements ScreepsWorld {
     limits: { [key: string]: number } = {}
 
     spawns: { [key: string]: any } = {};
+
+    _sources: { [name: string]: any } = {};
 
     spawned: any = [];
 
@@ -54,11 +57,19 @@ export class MockScreepsWorld implements ScreepsWorld {
         return 0;
     }
 
+    add_source(sourceId: string) {
+        this._sources[sourceId] = {};
+    }
+
     add_spawn(name: string, energy: number) {
         this.spawns[name] = {
             name: name,
             energy: energy
         };
+    }
+
+    sources(): { [name: string]: any; } {
+        return this._sources;
     }
 
     spawn(xname: string, roleName: string): number {
@@ -85,6 +96,9 @@ export class MockScreepsWorld implements ScreepsWorld {
 }
 
 export class ScreepsScreepsWorld implements ScreepsWorld {
+    sources(): { [name: string]: any; } {
+        throw new Error("Method not implemented.");
+    }
     limit(key: string, value?: number): number {
         if (value === undefined) {
             return get_memory(key);

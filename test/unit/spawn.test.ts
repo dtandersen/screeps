@@ -32,15 +32,10 @@ describe("xx", () => {
       name: 'harvester-1',
       role: 'harvester'
     });
-    // assert.deepInclude(screeps.spawned, {
-    //   name: 'upgrader-2',
-    //   role: 'upgrader'
-    // });
   });
 
   it("should spawn nothing", () => {
     let screeps = new MockScreepsWorld();
-    // screeps.add_creep("h1", 'harvester');
     screeps.add_creep("h2", 'harvester');
     screeps.add_creep("u1", 'upgrader');
     screeps.add_creep("u2", 'upgrader');
