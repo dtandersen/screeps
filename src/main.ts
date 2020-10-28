@@ -9,7 +9,9 @@ import { CommandFactory } from "job/command";
 import { InMemoryJobManager, ScreepsJobManager } from "role/jobmanager";
 import { JobDeployer as JobRunner } from "job/job";
 import { MiningJobHandler } from "job/job.miner";
-import { RoleRunner } from "role/role";
+import { RoleRunner } from "role/runner";
+import { ScreepRoleContext } from "role/role";
+import { CreepEntity, ScreepsCreepEntity } from "entity/creep";
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
@@ -57,7 +59,7 @@ function applyRole(role: Harvester, roleName: string) {
   for (const name in Memory.creeps) {
     let r = Memory.creeps[name].role;
     if (r === roleName) {
-      role.execute(Game.creeps[name]);
+      role.execute(new ScreepRoleContext(Game.creeps[name], new ScreepsCreepEntity(name, r, Game.creeps[name])));
     }
   }
 }

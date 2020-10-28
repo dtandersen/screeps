@@ -1,12 +1,13 @@
-import { Role } from "./role";
+import { Role, RoleContext } from "./role";
 
 export class Upgrader extends Role {
   constructor() {
     super('upgrader');
   }
 
-  execute(creep: Creep): void {
-    // console.log(`upgrader ${creep.name}`);
+  execute(context: RoleContext): void {
+    let creep = context.creep;
+
     var creepCarry = creep.store.getUsedCapacity(RESOURCE_ENERGY);
     var creepCarryCap = creep.store.getCapacity(RESOURCE_ENERGY);
 

@@ -1,3 +1,5 @@
+import { CreepEntity, MockCreepEntity, ScreepsCreepEntity } from "entity/creep";
+import { EntityNotFound } from "exception";
 import { get_memory, set_memory } from "memory";
 import { CreepSpawner } from "spawner";
 
@@ -20,7 +22,7 @@ export class SequentialIdGenerator implements IdGenerator {
 }
 
 export interface ScreepsWorld {
-    creeps_with_role(name: string): Creep[];
+    creeps_with_role(name: string): CreepEntity[];
     sources(): { [name: string]: any };
     limit(key: string, value: number): void;
     limit(key: string): number;
@@ -31,7 +33,7 @@ export interface ScreepsWorld {
 }
 
 export class MockScreepsWorld implements ScreepsWorld {
-    creeps: any = [];
+    creeps: CreepEntity[] = [];
 
     limits: { [key: string]: number } = {}
 
@@ -52,14 +54,18 @@ export class MockScreepsWorld implements ScreepsWorld {
         return value;
     };
 
-    add_creep(name: string, roleName: string): number {
-        this.creeps.push({ role: roleName });
+    add_creep(name: string, roleName: string, memory?: any): number {
+        if (memory == undefined) {
+            this.creeps.push(new MockCreepEntity(name, roleName, { memory: { role: roleName } }, { role: roleName }));
+        } else {
+            this.creeps.push(new MockCreepEntity(name, roleName, { memory: memory }, memory));
+        }
 
         return 0;
     }
 
-    add_source(sourceId: string) {
-        this._sources[sourceId] = {};
+    add_source(sourceId: string, x?: number, y?: number) {
+        this._sources[sourceId] = { x: x, y: y };
     }
 
     add_spawn(name: string, energy: number) {
@@ -69,17 +75,28 @@ export class MockScreepsWorld implements ScreepsWorld {
         };
     }
 
-    creeps_with_role(name: string): Creep[] {
+    findCreep(name: string): CreepEntity {
+        for (let creep of this.creeps) {
+            let r = creep.name;
+            if (r === name) {
+                return creep;
+            }
+        }
+        console.log(`${name} not found`);
+        throw new EntityNotFound();
+    }
+
+    creeps_with_role(name: string): CreepEntity[] {
         let results = [];
 
         for (let creep of this.creeps) {
-            let r = creep.role;
+            let r = creep.roleName;
             if (r === name) {
                 results.push(creep);
             }
         }
 
-        return results;
+        return results; //.map(creepEntity => creepEntity.creep);
     }
 
     sources(): { [name: string]: any; } {
@@ -99,7 +116,7 @@ export class MockScreepsWorld implements ScreepsWorld {
         let results = [];
 
         for (let creep of this.creeps) {
-            let r = creep.role;
+            let r = creep.roleName;
             if (r === role) {
                 results.push(creep);
             }
@@ -110,14 +127,15 @@ export class MockScreepsWorld implements ScreepsWorld {
 }
 
 export class ScreepsScreepsWorld implements ScreepsWorld {
-    creeps_with_role(name: string): Creep[] {
-        let results: Creep[] = [];
+    creeps_with_role(name: string): CreepEntity[] {
+        let results: CreepEntity[] = [];
 
         for (const name in Memory.creeps) {
             let mem: CreepMemory = Memory.creeps[name];
             let r = mem["role"];
             if (r === name) {
-                results.push(Game.creeps[name]);
+                let entity = new ScreepsCreepEntity(name, r, Game.creeps[name]);
+                results.push(entity);
             }
         }
 

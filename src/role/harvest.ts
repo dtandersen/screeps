@@ -1,12 +1,13 @@
-import { Role } from "./role";
+import { Role, RoleContext } from "./role";
 
 export class Harvester extends Role {
   constructor() {
     super('harvester');
   }
 
-  execute(creep: Creep): void {
-    // console.log(`harvest ${creep.name}`);
+  execute(context: RoleContext): void {
+    let creep = context.creep;
+
     if (creep.store.getFreeCapacity() > 0) {
       var sources = creep.room.find(FIND_SOURCES);
       if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
