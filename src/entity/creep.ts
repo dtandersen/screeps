@@ -1,19 +1,13 @@
-import { timeStamp } from "console";
+import { get_creep_memory } from "memory";
+import { OperationCanceledException } from "typescript";
 
-export abstract class CreepEntity {
-    abstract memory(key: string): any;
-    name: string;
-    roleName: string;
-    creep: Creep;
-    _memory: { [key: string]: any } = {};
+export interface CreepEntity {
+    readonly name: string;
+    readonly creep: Creep;
 
-    constructor(name: string, roleName: string, creep: Creep) {
-        this.name = name;
-        this.roleName = roleName;
-        this.creep = creep;
-    }
+    memory(key: string): any;
 
-    abstract moveTo(x: number, y: number): void;
+    moveTo(x: number, y: number): void;
 }
 
 export class Position {
@@ -26,15 +20,24 @@ export class Position {
     }
 }
 
-export class MockCreepEntity extends CreepEntity {
+export class MockCreepEntity implements CreepEntity {
+    name: string;
+    creep: Creep;
+    readonly _memory?: { [key: string]: any } = {};
+
     movedTo?: Position = undefined;
 
-    constructor(name: string, roleName: string, creep: any, memory: { [key: string]: any }) {
-        super(name, roleName, creep);
+    constructor(name: string, creep: any, memory: { [key: string]: any }) {
+        this.name = name;
+        this.creep = creep;
         this._memory = memory;
     }
 
     memory(key: string) {
+        if (this._memory == undefined) {
+            throw new OperationCanceledException();
+        }
+
         return this._memory[key];
     }
 
@@ -43,13 +46,17 @@ export class MockCreepEntity extends CreepEntity {
     }
 }
 
-export class ScreepsCreepEntity extends CreepEntity {
-    constructor(name: string, roleName: string, creep: Creep) {
-        super(name, roleName, creep);
+export class ScreepsCreepEntity implements CreepEntity {
+    name: string;
+    creep: Creep;
+
+    constructor(name: string, creep: Creep) {
+        this.name = name;
+        this.creep = creep;
     }
 
     memory(key: string) {
-        throw new Error("Method not implemented.");
+        return get_creep_memory(this.creep, key);
     }
 
     moveTo(x: number, y: number): void {

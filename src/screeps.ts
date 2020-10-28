@@ -56,9 +56,9 @@ export class MockScreepsWorld implements ScreepsWorld {
 
     add_creep(name: string, roleName: string, memory?: any): number {
         if (memory == undefined) {
-            this.creeps.push(new MockCreepEntity(name, roleName, { memory: { role: roleName } }, { role: roleName }));
+            this.creeps.push(new MockCreepEntity(name, { memory: { role: roleName } }, { role: roleName }));
         } else {
-            this.creeps.push(new MockCreepEntity(name, roleName, { memory: memory }, memory));
+            this.creeps.push(new MockCreepEntity(name, { memory: memory }, memory));
         }
 
         return 0;
@@ -90,7 +90,7 @@ export class MockScreepsWorld implements ScreepsWorld {
         let results = [];
 
         for (let creep of this.creeps) {
-            let r = creep.roleName;
+            let r = creep.memory('role');
             if (r === name) {
                 results.push(creep);
             }
@@ -116,7 +116,7 @@ export class MockScreepsWorld implements ScreepsWorld {
         let results = [];
 
         for (let creep of this.creeps) {
-            let r = creep.roleName;
+            let r = creep.memory('role');
             if (r === role) {
                 results.push(creep);
             }
@@ -134,7 +134,7 @@ export class ScreepsScreepsWorld implements ScreepsWorld {
             let mem: CreepMemory = Memory.creeps[name];
             let r = mem["role"];
             if (r === name) {
-                let entity = new ScreepsCreepEntity(name, r, Game.creeps[name]);
+                let entity = new ScreepsCreepEntity(name, Game.creeps[name]);
                 results.push(entity);
             }
         }

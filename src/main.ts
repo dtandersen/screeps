@@ -59,7 +59,7 @@ function applyRole(role: Harvester, roleName: string) {
   for (const name in Memory.creeps) {
     let r = Memory.creeps[name].role;
     if (r === roleName) {
-      role.execute(new ScreepRoleContext(Game.creeps[name], new ScreepsCreepEntity(name, r, Game.creeps[name])));
+      role.execute(new ScreepRoleContext(Game.creeps[name], new ScreepsCreepEntity(name, Game.creeps[name])));
     }
   }
 }
