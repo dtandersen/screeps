@@ -45,12 +45,12 @@ describe("spawn test", () => {
     screeps.add_creep("u1", 'upgrader');
     screeps.add_creep("u2", 'upgrader');
     screeps.add_creep("u3", 'upgrader');
-    screeps.add_creep("u4", 'upgrader');
-    screeps.add_creep("u5", 'upgrader');
-    screeps.add_creep("u6", 'upgrader');
-    screeps.add_creep("u7", 'upgrader');
-    screeps.add_creep("u8", 'upgrader');
-    screeps.add_creep("u9", 'upgrader');
+    // screeps.add_creep("u4", 'upgrader');
+    // screeps.add_creep("u5", 'upgrader');
+    // screeps.add_creep("u6", 'upgrader');
+    // screeps.add_creep("u7", 'upgrader');
+    // screeps.add_creep("u8", 'upgrader');
+    // screeps.add_creep("u9", 'upgrader');
     screeps.add_spawn('Spawn1', 299, 'room2', 8, 8);
     let roleManager = new InMemoryRoleManager();
     let spawner = new CreepSpawner(roleManager, screeps, new SequentialIdGenerator);

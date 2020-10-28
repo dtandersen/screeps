@@ -1,4 +1,4 @@
-import { MiningJob, MiningJobHandler } from "job/job.miner";
+import { MiningJob, MiningJobHandler } from "job/mining";
 import { JobManager } from "role/jobmanager";
 
 export class JobDeployer {

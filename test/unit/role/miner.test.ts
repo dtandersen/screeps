@@ -49,4 +49,22 @@ describe("mining creep", () => {
 
     assert.deepEqual(creep.movedTo, new Position(2, 2));
   });
+
+  it("should mine", () => {
+    let world = new MockScreepsWorld();
+    world.add_creep("miner-0", 'miner', { role: 'miner', x: 1, y: 1 });
+    world.add_source("0", 1, 1);
+    let role = new Miner();
+    let roleManager = new InMemoryRoleManager();
+    roleManager.add_role(role);
+
+    let roleRunner = new RoleRunner(world, roleManager);
+    roleRunner.run();
+
+    let creep: MockCreepEntity = world.findCreep('miner-0');
+
+    assert.equal(creep.energyCarried(), 2);
+    // assert.deepEqual(creep.movedTo, new Position(2, 2));
+    // assert.deepEqual(creep.movedTo, new Position(2, 2));
+  });
 })

@@ -7,7 +7,7 @@ import { CreepSpawner } from "spawner";
 import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator } from "screeps";
 import { MiningAdviser } from "adviser/mining.adviser";
 import { InMemoryJobManager, Job, JobManager } from "role/jobmanager";
-import { MiningJob, MiningJobHandler } from "job/job.miner";
+import { MiningJob, MiningJobHandler } from "job/mining";
 import { JobDeployer } from "job/job";
 
 describe("mining job", () => {

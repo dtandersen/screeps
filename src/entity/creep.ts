@@ -1,9 +1,13 @@
-import { MemoryUndefined } from "exception";
+import { EntityNotFound, MemoryUndefined } from "exception";
 import { get_creep_memory } from "memory";
 
 export interface CreepEntity {
     readonly name: string;
     readonly creep: Creep;
+
+    energyCarried(): number;
+
+    harvest(sourceId: string): void;
 
     memory(key: string): any;
 
@@ -26,11 +30,20 @@ export class MockCreepEntity implements CreepEntity {
     readonly _memory?: { [key: string]: any } = {};
 
     movedTo?: Position = undefined;
+    private _energyCarried?: number = 0;
 
     constructor(name: string, creep: any, memory: { [key: string]: any }) {
         this.name = name;
         this.creep = creep;
         this._memory = memory;
+    }
+
+    energyCarried() {
+        return this._energyCarried!;
+    }
+
+    harvest(sourceId: string): void {
+        this._energyCarried = this._energyCarried! + 2;
     }
 
     memory(key: string) {
@@ -53,6 +66,20 @@ export class ScreepsCreepEntity implements CreepEntity {
     constructor(name: string, creep: Creep) {
         this.name = name;
         this.creep = creep;
+    }
+
+    energyCarried() {
+        return this.creep.store[RESOURCE_ENERGY];
+    }
+
+    harvest(sourceId: string): void {
+        let source = this.creep.pos.findClosestByRange(FIND_SOURCES);
+        if (source == null) {
+            throw new EntityNotFound();
+        }
+
+        this.creep.harvest(source);
+
     }
 
     memory(key: string) {

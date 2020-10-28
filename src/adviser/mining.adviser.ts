@@ -1,5 +1,5 @@
 import { Command } from "job/command";
-import { MiningJob } from "job/job.miner";
+import { MiningJob } from "job/mining";
 import { Job, JobManager } from "role/jobmanager";
 import { ScreepsWorld } from "screeps";
 

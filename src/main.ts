@@ -8,7 +8,7 @@ import { MiningAdviser } from "adviser/mining.adviser";
 import { CommandFactory } from "job/command";
 import { InMemoryJobManager, ScreepsJobManager } from "role/jobmanager";
 import { JobDeployer as JobRunner } from "job/job";
-import { MiningJobHandler } from "job/job.miner";
+import { MiningJobHandler } from "job/mining";
 import { RoleRunner } from "role/runner";
 import { ScreepRoleContext } from "role/role";
 import { CreepEntity, ScreepsCreepEntity } from "entity/creep";
