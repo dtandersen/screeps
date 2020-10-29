@@ -29,7 +29,7 @@ export interface ScreepsWorld {
     limit(key: string, value: number): void;
     limit(key: string): number;
 
-    spawn(name: string, memory: { [name: string]: any }): number;
+    spawn(name: string, body: BodyPartConstant[], memory: { [name: string]: any }): number;
     findSpawn(name: string): SpawnEntity;
 
     count_role(role: string): number;
@@ -109,10 +109,10 @@ export class MockScreepsWorld implements ScreepsWorld {
         return this._sources;
     }
 
-    spawn(xname: string, memory: { [name: string]: any }): number {
+    spawn(name: string, body: BodyPartConstant[], memory: { [name: string]: any }): number {
         this.spawned.push({
-            name: xname,
-            role: memory['role'],
+            name: name,
+            body: body,
             memory: memory
         });
 
@@ -172,7 +172,7 @@ export class ScreepsScreepsWorld implements ScreepsWorld {
         return value;
     };
 
-    spawn(name: string, memory: { [name: string]: any }): number {
+    spawn(name: string, body: BodyPartConstant[], memory: { [name: string]: any }): number {
         log(`spawning ${name} ${memory['role']}`);
 
         memory['role'] = memory['role'];
@@ -180,7 +180,7 @@ export class ScreepsScreepsWorld implements ScreepsWorld {
         memory['room'] = Game.spawns["Spawn1"].room.name;
 
         let creepMemory = <CreepMemory>memory;
-        return Game.spawns["Spawn1"].spawnCreep([WORK, CARRY, MOVE], name, {
+        return Game.spawns["Spawn1"].spawnCreep(body, name, {
             memory: creepMemory,
             dryRun: false
         });

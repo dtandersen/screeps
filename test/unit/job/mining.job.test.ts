@@ -40,7 +40,7 @@ describe("mining job", () => {
     assert.lengthOf(world.spawned, 1);
     assert.deepInclude(world.spawned, {
       name: 'miner-0',
-      role: 'miner',
+      body: ["work", "work", "move"],
       memory: {
         role: 'miner',
         x: 1,
@@ -68,7 +68,7 @@ describe("mining job", () => {
     assert.lengthOf(world.spawned, 1);
     assert.deepInclude(world.spawned, {
       name: 'miner-1',
-      role: 'miner',
+      body: ['work', 'work', 'move'],
       memory: {
         role: 'miner',
         x: 2,

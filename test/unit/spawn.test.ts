@@ -30,7 +30,7 @@ describe("spawn test", () => {
     assert.equal(screeps.limit('upgrader'), 4);
     assert.deepInclude(screeps.spawned, {
       name: 'harvester-1',
-      role: 'harvester',
+      body: ["work", "carry", "move"],
       memory: {
         role: 'harvester',
         working: true,
@@ -59,7 +59,7 @@ describe("spawn test", () => {
 
     assert.deepInclude(screeps.spawned, {
       name: 'upgrader-1',
-      role: 'upgrader',
+      body: ["work", "carry", "move"],
       memory: {
         role: 'upgrader',
         working: true,

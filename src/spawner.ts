@@ -21,17 +21,23 @@ export class CreepSpawner {
         let spawn = this.screepsWorld.findSpawn('Spawn1');
 
         if (harvesters < 1) {
-            this.screepsWorld.spawn('harvester-' + this.idGenerator.next_id(), {
-                role: 'harvester',
-                working: true,
-                room: spawn.room
-            })
+            this.screepsWorld.spawn(
+                'harvester-' + this.idGenerator.next_id(),
+                ['work', 'carry', 'move'],
+                {
+                    role: 'harvester',
+                    working: true,
+                    room: spawn.room
+                })
         } else if (upgraders < 10) {
-            this.screepsWorld.spawn('upgrader-' + this.idGenerator.next_id(), {
-                role: 'upgrader',
-                working: true,
-                room: spawn.room
-            })
+            this.screepsWorld.spawn(
+                'upgrader-' + this.idGenerator.next_id(),
+                ['work', 'carry', 'move'],
+                {
+                    role: 'upgrader',
+                    working: true,
+                    room: spawn.room
+                })
         }
     }
 }
