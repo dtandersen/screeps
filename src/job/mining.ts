@@ -27,10 +27,7 @@ export class MiningJobHandler {
 
     run(job: MiningJob): void {
         let spawn = this.world.findSpawn('Spawn1');
-        console.log('zzz');
         let source = this.world.sources()[job.source_id!];
-        console.log('yyy');
-        console.log('sourceid=' + job.source_id);
         this.world.spawn(job.miner_creep_name, {
             role: 'miner',
             x: source.x,

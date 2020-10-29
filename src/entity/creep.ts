@@ -9,7 +9,7 @@ export interface CreepEntity {
 
     energyCarried(): number;
 
-    harvest(sourceId: string, source: SourceEntity): void;
+    harvest(source: SourceEntity): void;
 
     memory(key: string): any;
 
@@ -46,10 +46,9 @@ export class MockCreepEntity implements CreepEntity {
         return this._energyCarried!;
     }
 
-    harvest(sourceId: string, source: SourceEntity): void {
-        console.log(`harvest 2`)
+    harvest(source: SourceEntity): void {
         let dist = Math.hypot(this.position.x - source.x, this.position.y - source.y);
-        console.log(`dist = ${dist}`)
+
         if (dist < 2) {
             this._energyCarried = this._energyCarried! + 2;
         } else {
@@ -86,12 +85,7 @@ export class ScreepsCreepEntity implements CreepEntity {
         return this.creep.store[RESOURCE_ENERGY];
     }
 
-    harvest(sourceId: string, source: ScreepsSourceEntity): void {
-        // let source = this.creep.pos.findClosestByRange(FIND_SOURCES);
-        // if (source == null) {
-        //     throw new EntityNotFound();
-        // }
-        console.log('actual harvest')
+    harvest(source: ScreepsSourceEntity): void {
         let result = this.creep.harvest(source.source);
         if (result != OK) {
             throw new OutOfRange('source out of range');

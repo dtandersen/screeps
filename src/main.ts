@@ -13,11 +13,12 @@ import { RoleRunner } from "role/runner";
 import { ScreepRoleContext } from "role/role";
 import { CreepEntity, ScreepsCreepEntity } from "entity/creep";
 import { Miner } from "role/miner";
+import { log } from "memory";
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
-  console.log(`=== TICK ${Game.time} ===`);
+  log(`=== TICK ${Game.time} ===`);
 
   cleanMemory();
 

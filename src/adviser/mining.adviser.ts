@@ -20,9 +20,7 @@ export class MiningAdviser implements Command {
             job.source_id = name;
 
             let existing = this.jobManager.find('mining-job-' + name);
-            // console.log('existing=' + existing);
             if (existing === undefined) {
-                console.log('job=' + job);
                 this.jobManager.add(job);
             }
         }

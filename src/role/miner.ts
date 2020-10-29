@@ -2,7 +2,7 @@ import { ScreepsWorld } from "screeps";
 import { Role, RoleContext } from "./role";
 
 export class Miner extends Role {
-    world: ScreepsWorld;
+    private world: ScreepsWorld;
 
     constructor(world: ScreepsWorld) {
         super("miner");
@@ -10,16 +10,15 @@ export class Miner extends Role {
     }
 
     execute(context: RoleContext): void {
-        console.log(`miner exec`);
-        let entity = context.creepEntity;
-        let sourceId = entity.memory('sourceId');
+        let creep = context.creepEntity;
+        let sourceId = creep.memory('sourceId');
+
         try {
-            console.log(`harvest ${sourceId}`);
-            entity.harvest(sourceId, this.world.sources()[sourceId]);
+            let source = this.world.sources()[sourceId];
+            creep.harvest(source);
         }
         catch (e) {
-            console.log(`moveTo`);
-            entity.moveTo(entity.memory('x'), entity.memory('y'));
+            creep.moveTo(creep.memory('x'), creep.memory('y'));
         }
     }
 }

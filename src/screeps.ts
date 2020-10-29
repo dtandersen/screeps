@@ -2,7 +2,7 @@ import { CreepEntity, MockCreepEntity, Position, ScreepsCreepEntity } from "enti
 import { MockSourceEntity, ScreepsSourceEntity, SourceEntity } from "entity/source";
 import { MockSpawnEntity, ScreepsSpawnEntity, SpawnEntity } from "entity/spawn";
 import { EntityNotFound } from "exception";
-import { get_creep_memory, get_memory, set_memory } from "memory";
+import { get_creep_memory, get_memory, log, set_memory } from "memory";
 import { CreepSpawner } from "spawner";
 
 export interface IdGenerator {
@@ -84,7 +84,7 @@ export class MockScreepsWorld implements ScreepsWorld {
                 return creep;
             }
         }
-        console.log(`${name} not found`);
+
         throw new EntityNotFound(`creep ${name} not found`);
     }
 
@@ -134,15 +134,12 @@ export class MockScreepsWorld implements ScreepsWorld {
 }
 
 export class ScreepsScreepsWorld implements ScreepsWorld {
-    creeps_with_role(roleName: string): CreepEntity[] {
+    creeps_with_role(role: string): CreepEntity[] {
         let results: CreepEntity[] = [];
 
         for (const name in Memory.creeps) {
-            // let mem: CreepMemory = Memory.creeps[name];
-            // let r = mem["role"];
-            let r = get_creep_memory(Game.creeps[name], 'role');
-            // console.log(`${roleName} ${name}==${r}?`);
-            if (r == roleName) {
+            let creepRole = get_creep_memory(Game.creeps[name], 'role');
+            if (creepRole == role) {
                 let entity = new ScreepsCreepEntity(name, Game.creeps[name]);
                 results.push(entity);
             }
@@ -159,7 +156,6 @@ export class ScreepsScreepsWorld implements ScreepsWorld {
         let results: { [name: string]: SourceEntity } = {};
 
         for (let source of sources) {
-            // console.log(`sources ${source.id}`);
             results[source.id] = new ScreepsSourceEntity(source);
         }
 
@@ -177,7 +173,7 @@ export class ScreepsScreepsWorld implements ScreepsWorld {
     };
 
     spawn(name: string, memory: { [name: string]: any }): number {
-        console.log(`spawning ${name} ${memory['role']}`);
+        log(`spawning ${name} ${memory['role']}`);
 
         memory['role'] = memory['role'];
         memory['working'] = true;

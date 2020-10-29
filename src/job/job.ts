@@ -11,10 +11,7 @@ export class JobDeployer {
     }
 
     run() {
-        // console.log('running jobs');
-
         for (let job of this.jobManager.jobs()) {
-            console.log(JSON.stringify(job));
             this.handler.run(<MiningJob>job);
         }
     }
