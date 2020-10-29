@@ -24,6 +24,7 @@ export class SequentialIdGenerator implements IdGenerator {
 }
 
 export interface ScreepsWorld {
+    findCreep(name: string): CreepEntity | null;
     creeps_with_role(name: string): CreepEntity[];
     sources(): { [name: string]: SourceEntity };
     limit(key: string, value: number): void;
@@ -33,6 +34,8 @@ export interface ScreepsWorld {
     findSpawn(name: string): SpawnEntity;
 
     count_role(role: string): number;
+    memory(key: string, value: any): void;
+    memory(key: string): any;
 }
 
 export class MockScreepsWorld implements ScreepsWorld {
@@ -45,6 +48,8 @@ export class MockScreepsWorld implements ScreepsWorld {
     _sources: { [name: string]: SourceEntity } = {};
 
     spawned: any = [];
+
+    private _memory: { [key: string]: any } = {};
 
     limit(key: string, value?: number): number {
 
@@ -131,9 +136,26 @@ export class MockScreepsWorld implements ScreepsWorld {
 
         return results.length;
     }
+
+    memory(key: string, value?: any) {
+        if (value == undefined) {
+            return this._memory[key];
+        } else {
+            this._memory[key] = value;
+        }
+    }
 }
 
 export class ScreepsScreepsWorld implements ScreepsWorld {
+    findCreep(name: string): CreepEntity | null {
+        let creep = Game.creeps[name];
+        if (creep == null) {
+            throw new EntityNotFound(`creep ${name} not found`);
+        }
+
+        return new ScreepsCreepEntity(name, Game.creeps[name]);
+    }
+
     creeps_with_role(role: string): CreepEntity[] {
         let results: CreepEntity[] = [];
 
@@ -203,5 +225,27 @@ export class ScreepsScreepsWorld implements ScreepsWorld {
         }
 
         return results.length;
+    }
+
+    memory(key: string, value?: any) {
+        if (value == undefined) {
+            return get_memory(key);
+        } else {
+            set_memory(key, value);
+        }
+    }
+}
+
+export class SpawnRequest {
+    name: string;
+    body: BodyPartConstant[];
+    memory: {};
+    priority: number;
+
+    constructor({ name, body, memory, priority }: { name: string, body: BodyPartConstant[], memory: {}, priority: number }) {
+        this.name = name;
+        this.body = body;
+        this.memory = memory;
+        this.priority = priority;
     }
 }

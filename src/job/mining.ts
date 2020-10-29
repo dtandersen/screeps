@@ -1,5 +1,6 @@
+import { EntityNotFound } from "exception";
 import { Command } from "job/command";
-import { ScreepsWorld } from "screeps";
+import { ScreepsWorld, SpawnRequest } from "screeps";
 import { Job, JobManager } from "../role/jobmanager";
 
 export class MiningJob extends Job {
@@ -28,16 +29,23 @@ export class MiningJobHandler {
     run(job: MiningJob): void {
         let spawn = this.world.findSpawn('Spawn1');
         let source = this.world.sources()[job.source_id!];
-        this.world.spawn(
-            job.miner_creep_name,
-            ['work', 'work', 'move'],
-            {
-                role: 'miner',
-                x: source.x,
-                y: source.y,
-                working: true,
-                room: spawn.room,
-                sourceId: job.source_id
-            });
+        try {
+            let creep = this.world.findCreep(job.miner_creep_name);
+        } catch (e) {
+            this.world.memory('requests', [
+                new SpawnRequest({
+                    name: job.miner_creep_name,
+                    body: ['work', 'work', 'move'],
+                    memory: {
+                        role: 'miner',
+                        x: source.x,
+                        y: source.y,
+                        working: true,
+                        room: spawn.room,
+                        sourceId: job.source_id
+                    },
+                    priority: 10
+                })]);
+        }
     }
 }

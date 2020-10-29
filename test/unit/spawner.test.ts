@@ -4,7 +4,7 @@ import { loop } from "../../src/main";
 import { Game, Memory, SS } from "./mock"
 import { InMemoryRoleManager, RoleManager } from "role/rolemanager";
 import { CreepSpawner } from "spawner";
-import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator } from "screeps";
+import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator, SpawnRequest } from "screeps";
 
 describe("spawn test", () => {
   before(() => {
@@ -89,5 +89,41 @@ describe("spawn test", () => {
     assert.equal(screeps.limit('harvester'), 2);
     assert.equal(screeps.limit('upgrader'), 4);
     assert.isEmpty(screeps.spawned);
+  });
+
+  it("should spawn request", () => {
+    let world = new MockScreepsWorld();
+    let roleManager = new InMemoryRoleManager();
+    let spawner = new CreepSpawner(roleManager, world, new SequentialIdGenerator);
+
+    world.memory('requests', [new SpawnRequest(
+      {
+        name: 'upgrader-1',
+        body: ["work", "carry", "move"],
+        memory: {
+          role: 'upgrader',
+          working: true,
+          room: 'room2'
+        },
+        priority: 10
+      }
+    )]);
+
+    spawner.spawn();
+
+    // assert.equal(world.limit('harvester'), 2);
+    // assert.equal(world.limit('upgrader'), 4);
+    // assert.isEmpty(world.spawned);
+    assert.deepInclude(world.spawned, {
+      name: 'upgrader-1',
+      body: ["work", "carry", "move"],
+      memory: {
+        role: 'upgrader',
+        working: true,
+        room: 'room2'
+      }
+    });
+
+    assert.isEmpty(world.memory('requests'));
   });
 });

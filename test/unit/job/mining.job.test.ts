@@ -4,7 +4,7 @@ import { loop } from "../../../src/main";
 import { Game, Memory, SS } from "../mock"
 import { InMemoryRoleManager, RoleManager } from "role/rolemanager";
 import { CreepSpawner } from "spawner";
-import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator } from "screeps";
+import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator, SpawnRequest } from "screeps";
 import { MiningAdviser } from "adviser/mining.adviser";
 import { InMemoryJobManager, Job, JobManager } from "role/jobmanager";
 import { MiningJob, MiningJobHandler } from "job/mining";
@@ -37,10 +37,9 @@ describe("mining job", () => {
 
     job_deployer.run();
 
-    assert.lengthOf(world.spawned, 1);
-    assert.deepInclude(world.spawned, {
+    assert.deepEqual(world.memory('requests'), [new SpawnRequest({
       name: 'miner-0',
-      body: ["work", "work", "move"],
+      body: ['work', 'work', 'move'],
       memory: {
         role: 'miner',
         x: 1,
@@ -48,8 +47,9 @@ describe("mining job", () => {
         working: true,
         room: 'r1',
         sourceId: '0'
-      }
-    });
+      },
+      priority: 10
+    })]);
   });
 
   it("create another miner creep", () => {
@@ -65,8 +65,7 @@ describe("mining job", () => {
 
     job_deployer.run();
 
-    assert.lengthOf(world.spawned, 1);
-    assert.deepInclude(world.spawned, {
+    assert.deepEqual(world.memory('requests'), [new SpawnRequest({
       name: 'miner-1',
       body: ['work', 'work', 'move'],
       memory: {
@@ -76,7 +75,25 @@ describe("mining job", () => {
         working: true,
         room: 'r2',
         sourceId: '1'
-      }
-    });
+      },
+      priority: 10
+    })]);
+  });
+
+  it("don't spawn if miner exists", () => {
+    world.add_spawn('Spawn1', 300, 'r2', 6, 6);
+    world.add_source("1", 2, 2);
+    world.add_creep('miner-1', {}, 1, 1);
+    let job_deployer = new JobDeployer(jobManager, handler);
+
+    let job = new MiningJob('mining-job-1', 'miner-1', 1, 1);
+    job.type = "MINE";
+    job.source_id = "1";
+    job.miner_creep_name = 'miner-1';
+    jobManager.add(job);
+
+    job_deployer.run();
+
+    assert.isUndefined(world.memory('requests'));
   });
 });
