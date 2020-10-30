@@ -46,8 +46,27 @@ describe("extension adviser", () => {
     adviser.run();
 
     let layout = constructionManager.layout('r1')!;
-    assert.deepEqual(layout.get(2, 1), new RoomElement('road'));
-    assert.deepEqual(layout.get(3, 1), new RoomElement('road'));
+    assert.deepEqual(layout.get(2, 1), new RoomElement(2, 1, 'road'));
+    assert.deepEqual(layout.get(3, 1), new RoomElement(3, 1, 'road'));
+
+    let job = jobManager.find('layout-r1');
+    assert.deepEqual(job, new LayoutJob({
+      id: 'layout-r1',
+      layout: new RoomLayout({
+        elements: {
+          '2,1': {
+            x: 2,
+            y: 1,
+            structure: 'road'
+          },
+          '3,1': {
+            x: 3,
+            y: 1,
+            structure: 'road'
+          }
+        }
+      })
+    }));
   });
 
   /**
@@ -70,8 +89,27 @@ describe("extension adviser", () => {
     adviser.run();
 
     let layout = constructionManager.layout('r2')!;
-    assert.deepEqual(layout.get(2, 2), new RoomElement('road'));
-    assert.deepEqual(layout.get(2, 3), new RoomElement('road'));
+    assert.deepEqual(layout.get(2, 2), new RoomElement(2, 2, 'road'));
+    assert.deepEqual(layout.get(2, 3), new RoomElement(2, 3, 'road'));
+
+    let job = jobManager.find('layout-r2');
+    assert.deepEqual(job, new LayoutJob({
+      id: 'layout-r2',
+      layout: new RoomLayout({
+        elements: {
+          '2,2': {
+            x: 2,
+            y: 2,
+            structure: 'road'
+          },
+          '2,3': {
+            x: 2,
+            y: 3,
+            structure: 'road'
+          }
+        }
+      })
+    }));
   });
 
   /**
@@ -97,19 +135,26 @@ describe("extension adviser", () => {
     adviser.run();
 
     let layout = constructionManager.layout('r2')!;
-    assert.deepEqual(layout.get(2, 1), new RoomElement('road'));
-    assert.deepEqual(layout.get(1, 2), new RoomElement('road'));
+    assert.deepEqual(layout.get(2, 1), new RoomElement(2, 1, 'road'));
+    assert.deepEqual(layout.get(1, 2), new RoomElement(1, 2, 'road'));
 
     let job = jobManager.find('layout-r2');
     assert.deepEqual(job, new LayoutJob({
       id: 'layout-r2',
       layout: new RoomLayout({
         elements: {
-          '2,1': { structure: 'road' },
-          '1,2': { structure: 'road' }
+          '2,1': {
+            x: 2,
+            y: 1,
+            structure: 'road'
+          },
+          '1,2': {
+            x: 1,
+            y: 2,
+            structure: 'road'
+          }
         }
       })
-    }
-    ));
+    }));
   });
 });

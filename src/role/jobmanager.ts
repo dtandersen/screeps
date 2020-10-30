@@ -2,11 +2,12 @@ import { get_memory, set_memory } from "memory";
 
 export class Job {
     id: string;
-    type?: string;
+    type: string;
     source_id?: string;
 
-    constructor(id: string) {
+    constructor(id: string, type: string) {
         this.id = id;
+        this.type = type;
     }
 }
 

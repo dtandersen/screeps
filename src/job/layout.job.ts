@@ -1,9 +1,8 @@
 import { RoomLayout } from "entity/layout";
-import { Job } from "role/jobmanager";
+import { Job, JobManager } from "role/jobmanager";
+import { ScreepsWorld, SpawnRequest } from "screeps";
 
-export class LayoutJob implements Job {
-    id: string;
-    type?: string | undefined;
+export class LayoutJob extends Job {
     source_id?: string | undefined;
     layout: RoomLayout;
 
@@ -16,7 +15,35 @@ export class LayoutJob implements Job {
                 id: string,
                 layout: RoomLayout
             }) {
-        this.id = id;
+        super(id, 'layout');
         this.layout = layout;
+    }
+}
+
+export class LayoutJobHandler {
+    jobManager: JobManager;
+    world: ScreepsWorld;
+
+    constructor(world: ScreepsWorld, jobManager: JobManager) {
+        this.world = world;
+        this.jobManager = jobManager;
+    }
+
+    run(job: LayoutJob): void {
+        let spawn = this.world.findSpawn('Spawn1');
+        let id = `builder-${spawn.room}`;
+        try {
+            let creep = this.world.findCreep(id);
+        } catch (e) {
+            this.world.memory('requests', [
+                new SpawnRequest({
+                    name: id,
+                    body: ['work', 'carry', 'move'],
+                    memory: {
+                        role: 'builder'
+                    },
+                    priority: 5
+                })]);
+        }
     }
 }

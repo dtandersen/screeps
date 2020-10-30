@@ -1,7 +1,6 @@
-import { EntityNotFound } from "exception";
-import { Command } from "job/command";
 import { ScreepsWorld, SpawnRequest } from "screeps";
 import { Job, JobManager } from "../role/jobmanager";
+import { JobHandler } from "./job";
 
 export class MiningJob extends Job {
     /** id of creep that is mining */
@@ -10,14 +9,14 @@ export class MiningJob extends Job {
     y: number;
 
     constructor(id: string, miner_creep_name: string, x: number, y: number) {
-        super(id);
+        super(id, 'mining');
         this.miner_creep_name = miner_creep_name;
         this.x = x;
         this.y = y;
     }
 }
 
-export class MiningJobHandler {
+export class MiningJobHandler implements JobHandler {
     jobManager: JobManager;
     world: ScreepsWorld;
 

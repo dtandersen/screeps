@@ -1,7 +1,11 @@
 export class RoomElement {
+    x: number;
+    y: number;
     structure: string;
 
-    constructor(structure: string) {
+    constructor(x: number, y: number, structure: string) {
+        this.x = x;
+        this.y = y;
         this.structure = structure;
     }
 }
@@ -19,12 +23,10 @@ export class RoomLayout {
     }
 
     add(x: number, y: number, structure: string) {
-        console.log(`${this.key(x, y)} => ${structure}`);
-        this._elements[this.key(x, y)] = new RoomElement(structure);
+        this._elements[this.key(x, y)] = new RoomElement(x, y, structure);
     }
 
     get(x: number, y: number): RoomElement | null {
-        console.log(`get ${this.key(x, y)}`);
         return this._elements[this.key(x, y)];
     }
 

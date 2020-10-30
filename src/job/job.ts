@@ -1,18 +1,27 @@
 import { MiningJob, MiningJobHandler } from "job/mining";
-import { JobManager } from "role/jobmanager";
+import { Job, JobManager } from "role/jobmanager";
+import { LayoutJobHandler } from "./layout.job";
+
+export interface JobHandler {
+    run(job: Job): void;
+}
 
 export class JobDeployer {
     jobManager: JobManager;
-    handler: MiningJobHandler;
+    handlers: { [type: string]: JobHandler } = {};
 
-    constructor(jobManager: JobManager, handler: MiningJobHandler) {
+    constructor(jobManager: JobManager) {
         this.jobManager = jobManager;
-        this.handler = handler;
+    }
+
+    addHandler(type: string, handler: JobHandler) {
+        this.handlers[type] = handler;
     }
 
     run() {
         for (let job of this.jobManager.jobs()) {
-            this.handler.run(<MiningJob>job);
+            let handler = this.handlers[job.type];
+            handler.run(job);
         }
     }
 }

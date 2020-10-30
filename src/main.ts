@@ -16,6 +16,7 @@ import { Miner } from "role/miner";
 import { log } from "memory";
 import { ScreepsPathFinder } from "pathjgen";
 import { InMemoryConstructionManager } from "role/construction.manager";
+import { LayoutJobHandler } from "job/layout.job";
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
@@ -40,7 +41,9 @@ export const loop = ErrorMapper.wrapLoop(() => {
   let roadAdviser = factory.roadAdviser();
   roadAdviser.run();
 
-  let jobRunner = new JobRunner(jobManager, new MiningJobHandler(world, jobManager));
+  let jobRunner = new JobRunner(jobManager);
+  jobRunner.addHandler('MINE', new MiningJobHandler(world, jobManager));
+  jobRunner.addHandler('layout', new LayoutJobHandler(world, jobManager));
   jobRunner.run();
 
   spawnCreeps();
