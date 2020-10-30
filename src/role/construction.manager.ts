@@ -15,3 +15,15 @@ export class InMemoryConstructionManager implements ConstructionManager {
         return this._layouts[roomId];
     }
 }
+
+export class ScreepsConstructionManager implements ConstructionManager {
+    private _layouts: { [roomId: string]: RoomLayout } = {}
+
+    addLayout(roomId: string, layout: RoomLayout): void {
+        this._layouts[roomId] = layout;
+    }
+
+    layout(roomId: string): RoomLayout | null {
+        return this._layouts[roomId];
+    }
+}

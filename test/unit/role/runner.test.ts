@@ -18,8 +18,8 @@ describe("role runner", () => {
 
   it("should execute role on creep", () => {
     let world = new MockScreepsWorld();
-    world.add_creep("u1", { role: 'role1' }, 1, 1);
-    world.add_creep("u2", { role: 'role2' }, 2, 2);
+    world.add_creep("u1", { role: 'role1' }, 1, 1, 'r1');
+    world.add_creep("u2", { role: 'role2' }, 2, 2, 'r1');
 
     let role1 = new MockRole("role1");
     let role2 = new MockRole("role2");

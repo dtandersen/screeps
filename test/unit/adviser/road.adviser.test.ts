@@ -1,21 +1,13 @@
 import { assert } from "chai";
-import { mainModule } from "process";
-import { loop } from "../../../src/main";
-import { Game, Memory, SS } from "../mock"
-import { InMemoryRoleManager, RoleManager } from "role/rolemanager";
-import { CreepSpawner } from "spawner";
 import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator } from "screeps";
-import { MiningAdviser } from "adviser/mining.adviser";
-import { InMemoryJobManager, Job, JobManager } from "role/jobmanager";
-import { MiningJob } from "job/mining";
 import { InMemoryConstructionManager } from "role/construction.manager";
-import { ExtensionAdviser } from "adviser/construction.adviser";
+import { ExtensionAdviser as RoadAdviser } from "adviser/construction.adviser";
 import { RoomElement } from "entity/layout";
 import { MockPathGenerator } from "pathjgen";
 import { Position } from "entity/creep";
 
 describe("extension adviser", () => {
-  var adviser: ExtensionAdviser;
+  var adviser: RoadAdviser;
   var world: MockScreepsWorld;
   var constructionManager: InMemoryConstructionManager;
   var pathFinder: MockPathGenerator;
@@ -27,7 +19,7 @@ describe("extension adviser", () => {
     world = new MockScreepsWorld();
     constructionManager = new InMemoryConstructionManager();
     pathFinder = new MockPathGenerator();
-    adviser = new ExtensionAdviser(world, constructionManager, pathFinder);
+    adviser = new RoadAdviser(world, constructionManager, pathFinder);
   });
 
   /**
@@ -38,13 +30,13 @@ describe("extension adviser", () => {
    * | 3
    * v 4
    */
-  it("build road from spawn to source", () => {
+  it("build road from spawn to source in r1", () => {
     world.add_spawn('Spawn1', 300, 'r1', 1, 4)
     world.add_source("s1", 1, 1);
 
-    pathFinder.add(new Position(1, 4), new Position(1, 1), [
-      new Position(2, 1),
-      new Position(3, 1)
+    pathFinder.add(new Position(1, 4, 'r1'), new Position(1, 1, 'r1'), [
+      new Position(2, 1, 'r1'),
+      new Position(3, 1, 'r1')
     ]);
 
     adviser.run();
@@ -62,13 +54,13 @@ describe("extension adviser", () => {
    * | 3 r
    * v 4 s
    */
-  it("build road from spawn to source", () => {
+  it("build road from spawn to source in r2", () => {
     world.add_spawn('Spawn1', 300, 'r2', 2, 1)
     world.add_source("s1", 2, 4);
 
-    pathFinder.add(new Position(2, 1), new Position(2, 4), [
-      new Position(2, 2),
-      new Position(2, 3)
+    pathFinder.add(new Position(2, 1, 'r2'), new Position(2, 4, 'r2'), [
+      new Position(2, 2, 'r2'),
+      new Position(2, 3, 'r2')
     ]);
 
     adviser.run();
@@ -90,12 +82,12 @@ describe("extension adviser", () => {
     world.add_source("s1", 3, 1);
     world.add_source("s2", 1, 3);
 
-    pathFinder.add(new Position(1, 1), new Position(3, 1), [
-      new Position(2, 1)
+    pathFinder.add(new Position(1, 1, 'r2'), new Position(3, 1, 'r2'), [
+      new Position(2, 1, 'r2')
     ]);
 
-    pathFinder.add(new Position(1, 1), new Position(1, 3), [
-      new Position(1, 2)
+    pathFinder.add(new Position(1, 1, 'r2'), new Position(1, 3, 'r2'), [
+      new Position(1, 2, 'r2')
     ]);
 
     adviser.run();

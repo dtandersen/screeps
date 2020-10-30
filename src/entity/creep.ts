@@ -19,10 +19,12 @@ export interface CreepEntity {
 export class Position {
     x: number;
     y: number;
+    roomName: string;
 
-    constructor(x: number, y: number) {
+    constructor(x: number, y: number, roomName: string) {
         this.x = x;
         this.y = y;
+        this.roomName = roomName;
     }
 }
 
@@ -65,7 +67,7 @@ export class MockCreepEntity implements CreepEntity {
     }
 
     moveTo(x: number, y: number): void {
-        this.movedTo = new Position(x, y);
+        this.movedTo = new Position(x, y, this.position.roomName);
     }
 }
 
@@ -73,7 +75,7 @@ export class ScreepsCreepEntity implements CreepEntity {
     name: string;
     creep: Creep;
     get position(): Position {
-        return new Position(this.creep.pos.x, this.creep.pos.y);
+        return new Position(this.creep.pos.x, this.creep.pos.y, this.creep.room.name);
     }
 
     constructor(name: string, creep: Creep) {

@@ -62,8 +62,8 @@ export class MockScreepsWorld implements ScreepsWorld {
         return value;
     };
 
-    add_creep(name: string, memory: any, x: number, y: number): number {
-        this.creeps.push(new MockCreepEntity(name, { memory: memory }, memory, new Position(x, y)));
+    add_creep(name: string, memory: any, x: number, y: number, roomName: string): number {
+        this.creeps.push(new MockCreepEntity(name, { memory: memory }, memory, new Position(x, y, roomName)));
 
         return 0;
     }

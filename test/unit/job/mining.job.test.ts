@@ -83,7 +83,7 @@ describe("mining job", () => {
   it("don't spawn if miner exists", () => {
     world.add_spawn('Spawn1', 300, 'r2', 6, 6);
     world.add_source("1", 2, 2);
-    world.add_creep('miner-1', {}, 1, 1);
+    world.add_creep('miner-1', {}, 1, 1, 'r2');
     let job_deployer = new JobDeployer(jobManager, handler);
 
     let job = new MiningJob('mining-job-1', 'miner-1', 1, 1);
