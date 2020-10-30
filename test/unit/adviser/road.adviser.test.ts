@@ -1,15 +1,18 @@
 import { assert } from "chai";
 import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator } from "screeps";
 import { InMemoryConstructionManager } from "role/construction.manager";
-import { ExtensionAdviser as RoadAdviser } from "adviser/construction.adviser";
-import { RoomElement } from "entity/layout";
+import { RoadAdviser as RoadAdviser } from "adviser/road.adviser";
+import { RoomElement, RoomLayout } from "entity/layout";
 import { MockPathGenerator } from "pathjgen";
 import { Position } from "entity/creep";
+import { InMemoryJobManager } from "role/jobmanager";
+import { LayoutJob } from "job/layout.job";
 
 describe("extension adviser", () => {
   var adviser: RoadAdviser;
   var world: MockScreepsWorld;
   var constructionManager: InMemoryConstructionManager;
+  var jobManager: InMemoryJobManager;
   var pathFinder: MockPathGenerator;
 
   before(() => {
@@ -18,8 +21,9 @@ describe("extension adviser", () => {
   beforeEach(() => {
     world = new MockScreepsWorld();
     constructionManager = new InMemoryConstructionManager();
+    jobManager = new InMemoryJobManager();
     pathFinder = new MockPathGenerator();
-    adviser = new RoadAdviser(world, constructionManager, pathFinder);
+    adviser = new RoadAdviser(world, constructionManager, jobManager, pathFinder);
   });
 
   /**
@@ -95,5 +99,17 @@ describe("extension adviser", () => {
     let layout = constructionManager.layout('r2')!;
     assert.deepEqual(layout.get(2, 1), new RoomElement('road'));
     assert.deepEqual(layout.get(1, 2), new RoomElement('road'));
+
+    let job = jobManager.find('layout-r2');
+    assert.deepEqual(job, new LayoutJob({
+      id: 'layout-r2',
+      layout: new RoomLayout({
+        elements: {
+          '2,1': { structure: 'road' },
+          '1,2': { structure: 'road' }
+        }
+      })
+    }
+    ));
   });
 });

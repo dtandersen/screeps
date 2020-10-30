@@ -9,6 +9,15 @@ export class RoomElement {
 export class RoomLayout {
     _elements: { [key: string]: RoomElement } = {}
 
+    constructor(
+        {
+            elements = {}
+        }: {
+            elements: {}
+        }) {
+        this._elements = elements;
+    }
+
     add(x: number, y: number, structure: string) {
         console.log(`${this.key(x, y)} => ${structure}`);
         this._elements[this.key(x, y)] = new RoomElement(structure);

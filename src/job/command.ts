@@ -1,7 +1,7 @@
-import { ExtensionAdviser } from "adviser/construction.adviser";
+import { RoadAdviser } from "adviser/road.adviser";
 import { MiningAdviser } from "adviser/mining.adviser";
 import { ConstructionManager } from "role/construction.manager";
-import { PathFinder } from "pathjgen";
+import { PathFinder2 } from "pathjgen";
 import { JobManager } from "role/jobmanager";
 import { ScreepsWorld } from "screeps";
 
@@ -13,7 +13,7 @@ export class CommandFactory {
     world: ScreepsWorld;
     jobManager: JobManager;
     constructionManager: ConstructionManager;
-    pathFinder: PathFinder;
+    pathFinder: PathFinder2;
 
     constructor(
         {
@@ -25,7 +25,7 @@ export class CommandFactory {
             world: ScreepsWorld,
             jobManager: JobManager,
             constructionManager: ConstructionManager,
-            pathFinder: PathFinder
+            pathFinder: PathFinder2
         }) {
         this.world = world;
         this.jobManager = jobManager;
@@ -37,7 +37,11 @@ export class CommandFactory {
         return new MiningAdviser(this.world, this.jobManager);
     };
 
-    roadAdviser(): ExtensionAdviser {
-        return new ExtensionAdviser(this.world, this.constructionManager, this.pathFinder);
+    roadAdviser(): RoadAdviser {
+        return new RoadAdviser(
+            this.world,
+            this.constructionManager,
+            this.jobManager,
+            this.pathFinder);
     }
 }
