@@ -1,7 +1,8 @@
 import { RoleManager } from "role/rolemanager";
 import { IdGenerator, ScreepsWorld, SpawnRequest } from "screeps";
+import { System } from "system/system.runner";
 
-export class CreepSpawner {
+export class CreepSpawner implements System {
     roleManager: RoleManager;
     world: ScreepsWorld;
     idGenerator: IdGenerator;
@@ -12,7 +13,7 @@ export class CreepSpawner {
         this.idGenerator = idGenerator;
     }
 
-    spawn() {
+    run() {
         let harvesters = this.world.count_role('harvester');
         let upgraders = this.world.count_role('upgrader');
 
@@ -24,6 +25,11 @@ export class CreepSpawner {
 
         if (requests != undefined && requests.length > 0) {
             let request = requests[0];
+            for (let req of requests) {
+                if (req.priority > request.priority) {
+                    request = req;
+                }
+            }
             this.world.spawn(
                 request.name,
                 request.body,

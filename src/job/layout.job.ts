@@ -35,7 +35,7 @@ export class LayoutJobHandler {
         try {
             let creep = this.world.findCreep(id);
         } catch (e) {
-            this.world.memory('requests', [
+            this.world.requestSpawn(
                 new SpawnRequest({
                     name: id,
                     body: ['work', 'carry', 'move'],
@@ -43,7 +43,7 @@ export class LayoutJobHandler {
                         role: 'builder'
                     },
                     priority: 5
-                })]);
+                }));
         }
     }
 }

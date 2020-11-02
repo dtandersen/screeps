@@ -30,6 +30,7 @@ export interface ScreepsWorld {
     limit(key: string, value: number): void;
     limit(key: string): number;
 
+    requestSpawn(spawnRequest: SpawnRequest): void;
     spawn(name: string, body: BodyPartConstant[], memory: { [name: string]: any }): number;
     findSpawn(name: string): SpawnEntity;
 
@@ -70,6 +71,16 @@ export class MockScreepsWorld implements ScreepsWorld {
 
     add_source(sourceId: string, x: number, y: number) {
         this._sources[sourceId] = new MockSourceEntity(x, y);
+    }
+
+    requestSpawn(spawnRequest: SpawnRequest) {
+        let requests = this.memory('requests');
+        if (requests == undefined) {
+            requests = [];
+            this.memory('requests', requests);
+        }
+
+        requests.push(spawnRequest);
     }
 
     add_spawn(name: string, energy: number, room: string, x: number, y: number) {
@@ -193,6 +204,16 @@ export class ScreepsScreepsWorld implements ScreepsWorld {
 
         return value;
     };
+
+    requestSpawn(spawnRequest: SpawnRequest): void {
+        let requests = this.memory('requests');
+        if (requests == undefined) {
+            requests = [];
+            this.memory('requests', requests);
+        }
+
+        requests.push(spawnRequest);
+    }
 
     spawn(name: string, body: BodyPartConstant[], memory: { [name: string]: any }): number {
         log(`spawning ${name} ${memory['role']}`);

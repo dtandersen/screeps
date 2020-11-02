@@ -24,7 +24,7 @@ describe("spawn test", () => {
     let roleManager = new InMemoryRoleManager();
     let spawner = new CreepSpawner(roleManager, screeps, new SequentialIdGenerator);
 
-    spawner.spawn();
+    spawner.run();
 
     assert.equal(screeps.limit('harvester'), 2);
     assert.equal(screeps.limit('upgrader'), 4);
@@ -55,7 +55,7 @@ describe("spawn test", () => {
     let roleManager = new InMemoryRoleManager();
     let spawner = new CreepSpawner(roleManager, screeps, new SequentialIdGenerator);
 
-    spawner.spawn();
+    spawner.run();
 
     assert.deepInclude(screeps.spawned, {
       name: 'upgrader-1',
@@ -84,7 +84,7 @@ describe("spawn test", () => {
     let roleManager = new InMemoryRoleManager();
     let spawner = new CreepSpawner(roleManager, screeps, new SequentialIdGenerator);
 
-    spawner.spawn();
+    spawner.run();
 
     assert.equal(screeps.limit('harvester'), 2);
     assert.equal(screeps.limit('upgrader'), 4);
@@ -109,12 +109,9 @@ describe("spawn test", () => {
       }
     )]);
 
-    spawner.spawn();
+    spawner.run();
 
-    // assert.equal(world.limit('harvester'), 2);
-    // assert.equal(world.limit('upgrader'), 4);
-    // assert.isEmpty(world.spawned);
-    assert.deepInclude(world.spawned, {
+    assert.deepEqual(world.spawned, [{
       name: 'upgrader-1',
       body: ["work", "carry", "move"],
       memory: {
@@ -122,7 +119,53 @@ describe("spawn test", () => {
         working: true,
         room: 'room2'
       }
-    });
+    }]);
+
+    assert.isEmpty(world.memory('requests'));
+  });
+
+  it("should spawn highest priority request", () => {
+    let world = new MockScreepsWorld();
+    let roleManager = new InMemoryRoleManager();
+    let spawner = new CreepSpawner(roleManager, world, new SequentialIdGenerator);
+
+    world.requestSpawn(new SpawnRequest(
+      {
+        name: 'upgrader-1',
+        body: ["work", "carry", "move"],
+        memory: {
+          role: 'upgrader',
+          working: true,
+          room: 'room2'
+        },
+        priority: 5
+      }
+    ));
+
+    world.requestSpawn(new SpawnRequest(
+      {
+        name: 'miner-1',
+        body: ["work", "work", "move"],
+        memory: {
+          role: 'miner',
+          working: true,
+          room: 'room2'
+        },
+        priority: 10
+      }
+    ));
+
+    spawner.run();
+
+    assert.deepEqual(world.spawned, [{
+      name: 'miner-1',
+      body: ["work", "work", "move"],
+      memory: {
+        role: 'miner',
+        working: true,
+        room: 'room2'
+      }
+    }]);
 
     assert.isEmpty(world.memory('requests'));
   });

@@ -44,6 +44,48 @@ describe("layout job", () => {
     })]);
   });
 
+  it("don't overwrite other spawns", () => {
+    world.add_spawn('Spawn1', 300, 'r1', 5, 5);
+    world.add_source("0", 1, 1);
+    let job_deployer = new JobDeployer(jobManager);
+    job_deployer.addHandler('layout', handler);
+
+    let job = new LayoutJob({
+      id: 'layout-1',
+      layout: new RoomLayout({ elements: {} })
+    });
+    jobManager.add(job);
+
+    world.requestSpawn(new SpawnRequest({
+      name: 'miner1',
+      body: ['work', 'work', 'move'],
+      memory: {
+        role: 'miner'
+      },
+      priority: 10
+    }));
+
+    job_deployer.run();
+
+    assert.deepEqual(world.memory('requests'), [
+      new SpawnRequest({
+        name: 'miner1',
+        body: ['work', 'work', 'move'],
+        memory: {
+          role: 'miner'
+        },
+        priority: 10
+      }),
+      new SpawnRequest({
+        name: 'builder-r1',
+        body: ['work', 'carry', 'move'],
+        memory: {
+          role: 'builder'
+        },
+        priority: 5
+      })]);
+  });
+
   it("don't spawn layout creep if exists", () => {
     world.add_spawn('Spawn1', 300, 'r2', 5, 5);
     world.add_creep('builder-r2', {}, 1, 1, 'r2');

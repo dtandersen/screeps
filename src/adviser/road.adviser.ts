@@ -6,8 +6,9 @@ import { PathFinder2 as PathFinder2 } from "pathjgen";
 import { ConstructionManager } from "role/construction.manager";
 import { JobManager } from "role/jobmanager";
 import { ScreepsWorld } from "screeps";
+import { System } from "system/system.runner";
 
-export class RoadAdviser implements Command {
+export class RoadAdviser implements Command, System {
     world: ScreepsWorld;
     constructionManager: ConstructionManager;
     jobManager: JobManager;

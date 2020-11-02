@@ -17,6 +17,7 @@ import { log } from "memory";
 import { ScreepsPathFinder } from "pathjgen";
 import { InMemoryConstructionManager } from "role/construction.manager";
 import { LayoutJobHandler } from "job/layout.job";
+import { SystemRunner } from "system/system.runner";
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
@@ -29,32 +30,32 @@ export const loop = ErrorMapper.wrapLoop(() => {
   let world = new ScreepsScreepsWorld();
   let constructionManager = new InMemoryConstructionManager();
   let pathFinder = new ScreepsPathFinder();
+  let roleManager = new InMemoryRoleManager();
   let factory = new CommandFactory({
     world: world,
     jobManager: jobManager,
     constructionManager: constructionManager,
-    pathFinder: pathFinder
+    pathFinder: pathFinder,
+    roleManager: roleManager
   });
-  let adviser = factory.miningAdviser();
-  adviser.run();
 
-  let roadAdviser = factory.roadAdviser();
-  roadAdviser.run();
+  let systemRunner = new SystemRunner();
 
-  let jobRunner = new JobRunner(jobManager);
+  let jobRunner = factory.jobRunner();
   jobRunner.addHandler('MINE', new MiningJobHandler(world, jobManager));
   jobRunner.addHandler('layout', new LayoutJobHandler(world, jobManager));
-  jobRunner.run();
 
-  spawnCreeps();
-
-  let roleManager = new InMemoryRoleManager();
   roleManager.add_role(new Harvester());
   roleManager.add_role(new Upgrader());
   roleManager.add_role(new Miner(world));
 
-  let roleRunner = new RoleRunner(world, roleManager);
-  roleRunner.run();
+  systemRunner.registerSystem(factory.miningAdviser());
+  systemRunner.registerSystem(factory.roadAdviser());
+  systemRunner.registerSystem(jobRunner);
+  systemRunner.registerSystem(factory.creepSpawner());
+  systemRunner.registerSystem(factory.roleRunner());
+
+  systemRunner.run();
 });
 
 // Automatically delete memory of missing creeps
@@ -64,13 +65,4 @@ function cleanMemory() {
       delete Memory.creeps[name];
     }
   }
-}
-
-// module main {
-function spawnCreeps() {
-  let screeps = new ScreepsScreepsWorld();
-  let roleManager = new InMemoryRoleManager();
-  let spawner = new CreepSpawner(roleManager, screeps, new RandomIdGenerator());
-
-  spawner.spawn();
 }

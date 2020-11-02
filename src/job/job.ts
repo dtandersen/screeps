@@ -1,12 +1,11 @@
-import { MiningJob, MiningJobHandler } from "job/mining";
 import { Job, JobManager } from "role/jobmanager";
-import { LayoutJobHandler } from "./layout.job";
+import { System } from "system/system.runner";
 
 export interface JobHandler {
     run(job: Job): void;
 }
 
-export class JobDeployer {
+export class JobDeployer implements System {
     jobManager: JobManager;
     handlers: { [type: string]: JobHandler } = {};
 
