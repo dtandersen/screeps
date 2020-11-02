@@ -1,6 +1,6 @@
 import { CreepEntity } from "entity/creep";
-import { RoleManager } from "role/rolemanager";
-import { ScreepsWorld } from "screeps";
+import { RoleManager } from "gateway/role.manager";
+import { ScreepsWorld } from "gateway/screeps";
 
 export interface RoleContext {
   creep: Creep;

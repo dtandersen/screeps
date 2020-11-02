@@ -1,7 +1,6 @@
 import { assert } from "chai";
-import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator, SpawnRequest } from "screeps";
-import { InMemoryJobManager, Job, JobManager } from "role/jobmanager";
-import { MiningJob, MiningJobHandler } from "job/mining";
+import { MockScreepsWorld, SpawnRequest } from "gateway/screeps";
+import { InMemoryJobManager, JobManager } from "gateway/job.manager";
 import { JobDeployer } from "job/job";
 import { LayoutJob, LayoutJobHandler } from "job/layout.job";
 import { RoomLayout } from "entity/layout";

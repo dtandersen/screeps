@@ -2,11 +2,11 @@ import { assert } from "chai";
 import { mainModule } from "process";
 import { loop } from "../../../src/main";
 import { Game, Memory, SS } from "../mock"
-import { InMemoryRoleManager, RoleManager } from "role/rolemanager";
-import { CreepSpawner } from "spawner";
-import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator } from "screeps";
+import { InMemoryRoleManager, RoleManager } from "gateway/role.manager";
+import { CreepSpawner } from "system/spawner";
+import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator } from "gateway/screeps";
 import { Role, RoleContext, ScreepRoleContext } from "role/role";
-import { RoleRunner } from "role/runner";
+import { RoleRunner } from "system/runner";
 
 describe("role runner", () => {
   before(() => {

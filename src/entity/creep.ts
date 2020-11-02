@@ -1,5 +1,5 @@
 import { EntityNotFound, MemoryUndefined, OutOfRange } from "exception";
-import { get_creep_memory } from "memory";
+import { get_creep_memory } from "gateway/memory";
 import { ScreepsSourceEntity, SourceEntity } from "./source";
 
 export interface CreepEntity {

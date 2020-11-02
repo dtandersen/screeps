@@ -2,8 +2,7 @@ import { CreepEntity, MockCreepEntity, Position, ScreepsCreepEntity } from "enti
 import { MockSourceEntity, ScreepsSourceEntity, SourceEntity } from "entity/source";
 import { MockSpawnEntity, ScreepsSpawnEntity, SpawnEntity } from "entity/spawn";
 import { EntityNotFound } from "exception";
-import { get_creep_memory, get_memory, log, set_memory } from "memory";
-import { CreepSpawner } from "spawner";
+import { get_creep_memory, get_memory, log, set_memory } from "gateway/memory";
 
 export interface IdGenerator {
     next_id(): number;

@@ -1,10 +1,9 @@
-import { Command } from "job/command";
 import { MiningJob } from "job/mining";
-import { Job, JobManager } from "role/jobmanager";
-import { ScreepsWorld } from "screeps";
+import { Job, JobManager } from "gateway/job.manager";
+import { ScreepsWorld } from "gateway/screeps";
 import { System } from "system/system.runner";
 
-export class MiningAdviser implements Command, System {
+export class MiningAdviser implements System {
     world: ScreepsWorld;
     jobManager: JobManager;
 

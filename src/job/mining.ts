@@ -1,5 +1,5 @@
-import { ScreepsWorld, SpawnRequest } from "screeps";
-import { Job, JobManager } from "../role/jobmanager";
+import { ScreepsWorld, SpawnRequest } from "gateway/screeps";
+import { Job, JobManager } from "../gateway/job.manager";
 import { JobHandler } from "./job";
 
 export class MiningJob extends Job {

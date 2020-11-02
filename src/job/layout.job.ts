@@ -1,6 +1,6 @@
 import { RoomLayout } from "entity/layout";
-import { Job, JobManager } from "role/jobmanager";
-import { ScreepsWorld, SpawnRequest } from "screeps";
+import { Job, JobManager } from "gateway/job.manager";
+import { ScreepsWorld, SpawnRequest } from "gateway/screeps";
 
 export class LayoutJob extends Job {
     source_id?: string | undefined;

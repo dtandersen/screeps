@@ -1,5 +1,5 @@
-import { RoleManager } from "role/rolemanager";
-import { IdGenerator, ScreepsWorld, SpawnRequest } from "screeps";
+import { RoleManager } from "gateway/role.manager";
+import { IdGenerator, ScreepsWorld, SpawnRequest } from "gateway/screeps";
 import { System } from "system/system.runner";
 
 export class CreepSpawner implements System {

@@ -1,11 +1,11 @@
 import { assert } from "chai";
-import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator } from "screeps";
-import { InMemoryConstructionManager } from "role/construction.manager";
-import { RoadAdviser as RoadAdviser } from "adviser/road.adviser";
+import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator } from "gateway/screeps";
+import { InMemoryConstructionManager } from "gateway/construction.manager";
+import { RoadAdviser as RoadAdviser } from "system/road.adviser";
 import { RoomElement, RoomLayout } from "entity/layout";
 import { MockPathGenerator } from "pathjgen";
 import { Position } from "entity/creep";
-import { InMemoryJobManager } from "role/jobmanager";
+import { InMemoryJobManager } from "gateway/job.manager";
 import { LayoutJob } from "job/layout.job";
 
 describe("extension adviser", () => {

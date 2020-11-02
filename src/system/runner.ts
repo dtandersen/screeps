@@ -1,9 +1,10 @@
-import { log } from "memory";
-import { ScreepsWorld } from "screeps";
-import { ScreepRoleContext as ScreepsRoleContext } from "./role";
-import { RoleManager } from "./rolemanager";
+import { log } from "gateway/memory";
+import { ScreepsWorld } from "gateway/screeps";
+import { ScreepRoleContext as ScreepsRoleContext } from "../role/role";
+import { RoleManager } from "../gateway/role.manager";
+import { System } from "system/system.runner";
 
-export class RoleRunner {
+export class RoleRunner implements System {
     world: ScreepsWorld;
     roleManager: RoleManager;
 

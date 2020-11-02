@@ -1,4 +1,4 @@
-import { get_memory, set_memory } from "memory";
+import { get_memory, set_memory } from "gateway/memory";
 
 export class Job {
     id: string;

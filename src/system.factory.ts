@@ -1,19 +1,15 @@
-import { RoadAdviser } from "adviser/road.adviser";
-import { MiningAdviser } from "adviser/mining.adviser";
-import { ConstructionManager } from "role/construction.manager";
+import { RoadAdviser } from "system/road.adviser";
+import { MiningAdviser } from "system/mining.adviser";
+import { ConstructionManager } from "gateway/construction.manager";
 import { PathFinder2 } from "pathjgen";
-import { JobManager } from "role/jobmanager";
-import { RandomIdGenerator, ScreepsWorld } from "screeps";
-import { JobDeployer } from "./job";
-import { RoleManager } from "role/rolemanager";
-import { CreepSpawner } from "spawner";
-import { RoleRunner } from "role/runner";
+import { JobManager } from "gateway/job.manager";
+import { RandomIdGenerator, ScreepsWorld } from "gateway/screeps";
+import { JobDeployer } from "./job/job";
+import { RoleManager } from "gateway/role.manager";
+import { CreepSpawner } from "system/spawner";
+import { RoleRunner } from "system/runner";
 
-export interface Command {
-    run(): void;
-}
-
-export class CommandFactory {
+export class SystemFactory {
     world: ScreepsWorld;
     jobManager: JobManager;
     constructionManager: ConstructionManager;

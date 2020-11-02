@@ -1,4 +1,4 @@
-import { Job, JobManager } from "role/jobmanager";
+import { Job, JobManager } from "gateway/job.manager";
 import { System } from "system/system.runner";
 
 export interface JobHandler {

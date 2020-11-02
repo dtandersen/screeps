@@ -1,4 +1,4 @@
-import { ScreepsWorld } from "screeps";
+import { ScreepsWorld } from "gateway/screeps";
 import { Role, RoleContext } from "./role";
 
 export class Miner extends Role {
