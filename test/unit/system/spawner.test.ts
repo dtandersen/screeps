@@ -1,10 +1,7 @@
 import { assert } from "chai";
-import { mainModule } from "process";
-import { loop } from "../../../src/main";
-import { Game, Memory, SS } from "../mock"
-import { InMemoryRoleManager, RoleManager } from "gateway/role.manager";
+import { InMemoryRoleManager } from "gateway/role.manager";
 import { CreepSpawner } from "system/spawner";
-import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator, SpawnRequest } from "gateway/screeps";
+import { MockScreepsWorld, SequentialIdGenerator, SpawnRequest } from "gateway/screeps";
 
 describe("spawn test", () => {
   before(() => {
@@ -12,83 +9,6 @@ describe("spawn test", () => {
   });
 
   beforeEach(() => {
-  });
-
-  it("should spawn harvester when energy below 300", () => {
-    let screeps = new MockScreepsWorld();
-    // screeps.add_creep("h1", 'harvester');
-    screeps.add_creep("u1", { role: 'upgrader' }, 1, 1, 'r1');
-    screeps.add_creep("u2", { role: 'upgrader' }, 2, 2, 'r1');
-    screeps.add_creep("u3", { role: 'upgrader' }, 3, 3, 'r1');
-    screeps.add_spawn('Spawn1', 299, 'r1', 7, 7);
-    let roleManager = new InMemoryRoleManager();
-    let spawner = new CreepSpawner(roleManager, screeps, new SequentialIdGenerator);
-
-    spawner.run();
-
-    assert.equal(screeps.limit('harvester'), 2);
-    assert.equal(screeps.limit('upgrader'), 4);
-    assert.deepInclude(screeps.spawned, {
-      name: 'harvester-1',
-      body: ["work", "carry", "move"],
-      memory: {
-        role: 'harvester',
-        working: true,
-        room: 'r1'
-      }
-    });
-  });
-
-  it("should spawn upgrader when energy below 300", () => {
-    let screeps = new MockScreepsWorld();
-    screeps.add_creep("h2", { role: 'harvester' }, 4, 4, 'r1');
-    screeps.add_creep("u1", { role: 'upgrader' }, 1, 1, 'r1');
-    screeps.add_creep("u2", { role: 'upgrader' }, 2, 2, 'r1');
-    screeps.add_creep("u3", { role: 'upgrader' }, 3, 3, 'r1');
-    // screeps.add_creep("u4", 'upgrader');
-    // screeps.add_creep("u5", 'upgrader');
-    // screeps.add_creep("u6", 'upgrader');
-    // screeps.add_creep("u7", 'upgrader');
-    // screeps.add_creep("u8", 'upgrader');
-    // screeps.add_creep("u9", 'upgrader');
-    screeps.add_spawn('Spawn1', 299, 'room2', 8, 8);
-    let roleManager = new InMemoryRoleManager();
-    let spawner = new CreepSpawner(roleManager, screeps, new SequentialIdGenerator);
-
-    spawner.run();
-
-    assert.deepInclude(screeps.spawned, {
-      name: 'upgrader-1',
-      body: ["work", "carry", "move"],
-      memory: {
-        role: 'upgrader',
-        working: true,
-        room: 'room2'
-      }
-    });
-  });
-
-  it("should spawn nothing", () => {
-    let screeps = new MockScreepsWorld();
-    screeps.add_creep("h2", { role: 'harvester' }, 4, 4, 'r1');
-    screeps.add_creep("u1", { role: 'upgrader' }, 4, 4, 'r1');
-    screeps.add_creep("u2", { role: 'upgrader' }, 4, 4, 'r1');
-    screeps.add_creep("u3", { role: 'upgrader' }, 4, 4, 'r1');
-    screeps.add_creep("u4", { role: 'upgrader' }, 4, 4, 'r1');
-    screeps.add_creep("u5", { role: 'upgrader' }, 4, 4, 'r1');
-    screeps.add_creep("u6", { role: 'upgrader' }, 4, 4, 'r1');
-    screeps.add_creep("u7", { role: 'upgrader' }, 4, 4, 'r1');
-    screeps.add_creep("u8", { role: 'upgrader' }, 4, 4, 'r1');
-    screeps.add_creep("u9", { role: 'upgrader' }, 4, 4, 'r1');
-    screeps.add_creep("u10", { role: 'upgrader' }, 4, 4, 'r1');
-    let roleManager = new InMemoryRoleManager();
-    let spawner = new CreepSpawner(roleManager, screeps, new SequentialIdGenerator);
-
-    spawner.run();
-
-    assert.equal(screeps.limit('harvester'), 2);
-    assert.equal(screeps.limit('upgrader'), 4);
-    assert.isEmpty(screeps.spawned);
   });
 
   it("should spawn request", () => {

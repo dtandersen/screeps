@@ -82,6 +82,10 @@ export class MockScreepsWorld implements ScreepsWorld {
         requests.push(spawnRequest);
     }
 
+    spawnRequests(): SpawnRequest[] {
+        return this.memory('requests');
+    }
+
     add_spawn(name: string, energy: number, room: string, x: number, y: number) {
         this.spawns[name] = new MockSpawnEntity(
             name,

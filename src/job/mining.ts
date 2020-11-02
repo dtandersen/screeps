@@ -31,7 +31,7 @@ export class MiningJobHandler implements JobHandler {
         try {
             let creep = this.world.findCreep(job.miner_creep_name);
         } catch (e) {
-            this.world.memory('requests', [
+            this.world.requestSpawn(
                 new SpawnRequest({
                     name: job.miner_creep_name,
                     body: ['work', 'work', 'move'],
@@ -44,7 +44,7 @@ export class MiningJobHandler implements JobHandler {
                         sourceId: job.source_id
                     },
                     priority: 10
-                })]);
+                }));
         }
     }
 }

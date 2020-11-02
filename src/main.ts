@@ -31,12 +31,14 @@ export const loop = ErrorMapper.wrapLoop(() => {
   let constructionManager = new InMemoryConstructionManager();
   let pathFinder = new ScreepsPathFinder();
   let roleManager = new InMemoryRoleManager();
+  let idGenerator = new RandomIdGenerator();
   let factory = new SystemFactory({
     world: world,
     jobManager: jobManager,
     constructionManager: constructionManager,
     pathFinder: pathFinder,
-    roleManager: roleManager
+    roleManager: roleManager,
+    idGenerator: idGenerator
   });
 
   let systemRunner = new SystemRunner();
@@ -51,6 +53,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
   systemRunner.registerSystem(factory.miningAdviser());
   systemRunner.registerSystem(factory.roadAdviser());
+  systemRunner.registerSystem(factory.upgraderSystem());
+  systemRunner.registerSystem(factory.harvesterSystem());
   systemRunner.registerSystem(jobRunner);
   systemRunner.registerSystem(factory.creepSpawner());
   systemRunner.registerSystem(factory.roleRunner());

@@ -1,11 +1,5 @@
 import { assert } from "chai";
-import { mainModule } from "process";
-import { loop } from "../../../src/main";
-import { Game, Memory, SS } from "../mock"
-import { InMemoryRoleManager, RoleManager } from "gateway/role.manager";
-import { CreepSpawner } from "system/spawner";
-import { MockScreepsWorld, ScreepsWorld, SequentialIdGenerator, SpawnRequest } from "gateway/screeps";
-import { MiningAdviser } from "system/mining.adviser";
+import { MockScreepsWorld, SpawnRequest } from "gateway/screeps";
 import { InMemoryJobManager, Job, JobManager } from "gateway/job.manager";
 import { MiningJob, MiningJobHandler } from "job/mining";
 import { JobDeployer } from "job/job";
