@@ -28,6 +28,7 @@ export class MiningJobHandler implements JobHandler {
     run(job: MiningJob): void {
         let spawn = this.world.findSpawn('Spawn1');
         let source = this.world.sources()[job.source_id!];
+
         try {
             let creep = this.world.findCreep(job.miner_creep_name);
         } catch (e) {
